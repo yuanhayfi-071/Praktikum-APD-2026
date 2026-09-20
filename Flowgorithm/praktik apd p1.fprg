@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="praktik apd p1"/>
+        <attribute name="authors" value="Maulyanda Yuan"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-09-10 03:15:01 PM"/>
+        <attribute name="created" value="TWF1bHlhbmRhIFl1YW47QVNVUzsyMDI2LTA5LTEwOzAzOjE0OjIyIFBNOzI5NjE="/>
+        <attribute name="edited" value="TWF1bHlhbmRhIFl1YW47QVNVUzsyMDI2LTA5LTEwOzAzOjE1OjAxIFBNOzE7MzA2Nw=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body/>
+    </function>
+</flowgorithm>
