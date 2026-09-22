@@ -18,13 +18,13 @@ for index, harga in enumerate(harga_komponen):
     print(f"harga komponen ke-{index +1}: Rp.{harga}")
 print(f"\nbiaya admin: Rp.{biaya_admin}")
 print(f"total biaya: Rp.{total_biaya}")
-print(f"rata-rata: {rata_rata}")
+print(f"rata-rata: {int(rata_rata)}")
 print(f"nim: {nim}")
 print(f"boolean: {boolean}")
 
 #print total biaya dalam pound sterling
-kurs_gbp = 23.860
-harga_dalam_gbp = total_biaya/kurs_gbp
+kurs_gbp = 23.800
+harga_dalam_gbp = int(total_biaya/kurs_gbp)
 print(f"\nbiaya dalam GBP: £{harga_dalam_gbp}")
 
 #print 1-4 dg. slice index negatif
