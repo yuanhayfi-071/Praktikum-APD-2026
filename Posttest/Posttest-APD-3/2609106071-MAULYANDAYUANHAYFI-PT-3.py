@@ -37,7 +37,7 @@ if lanjut_topup == True:
     print(f"3. {(daftar_game)[2]}")
     pilihan_game = int(input(": "))
     game = daftar_game[pilihan_game-1]
-    print(f"\nAnda memilih [ {game} ]!")
+    print(f"\nAnda memilih {game}!")
 
     print("\nSilahkan pilih kategori top up:")
     print(f"1. Kecil Rp.{(harga)[0]}.")
@@ -67,16 +67,16 @@ if lanjut_topup == True:
     total_bayar = harga_dasar + biaya_admin
     print(f"\nTotal tagihan anda Rp.{total_bayar}.")
     setoran = int(input("Masukkan nominal pembayaran: "))
-    if setoran < total_bayar:
-        print("Transaksi gagal! Saldo tidak mencukupi.")
-    elif setoran > total_bayar:
+    if setoran > total_bayar:
         kembalian = setoran - total_bayar
-        print("Transaksi berhasil!")
         ada_kembalian = True
+        print("Transaksi berhasil!")
+        transaksi_berhasil = True
+    elif setoran == total_bayar:
+        print("Transaksi berhasil!")
         transaksi_berhasil = True
     else:
-        print("Transaksi berhasil!")
-        transaksi_berhasil = True
+        print("Transaksi gagal! Saldo tidak mencukupi.")
 
     if transaksi_berhasil == True:
         print("\n===KEQINGTOPUP.COM===")
