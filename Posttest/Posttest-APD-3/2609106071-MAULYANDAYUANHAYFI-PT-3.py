@@ -9,7 +9,6 @@
 
 akun = [{"nama_akun":"Maul", "password":"71"}]
 logged_in = False
-cancel = False
 daftar_game = ["Genshin Impact", "Minecraft", "Mobile Legends: Bang Bang"]
 
 def login_menu():
