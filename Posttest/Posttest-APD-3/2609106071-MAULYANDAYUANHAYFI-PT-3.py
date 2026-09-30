@@ -26,6 +26,7 @@ if username == username_benar and password == password_benar:
     lanjut_topup = True
 else:
     print("Login gagal!")
+print("=====================")
 
 if lanjut_topup == True:
     print("\n===KEQINGTOPUP.COM===")
@@ -63,9 +64,11 @@ if lanjut_topup == True:
     metode_pembayaran = "Pulsa" if pilihan_metode == "1" else "E-Wallet"
     print(f"\nAnda memilih metode pembayaran {metode_pembayaran}!")
     print(f"Pembelian dikenakan biaya admin Rp.{biaya_admin}.")
+    print("=====================")
 
     total_bayar = harga_dasar + biaya_admin
-    print(f"\nTotal tagihan anda Rp.{total_bayar}.")
+    print("\n===KEQINGTOPUP.COM===")
+    print(f"Total tagihan anda Rp.{total_bayar}.")
     setoran = int(input("Masukkan nominal pembayaran: "))
     if setoran > total_bayar:
         kembalian = setoran - total_bayar
@@ -77,18 +80,20 @@ if lanjut_topup == True:
         transaksi_berhasil = True
     else:
         print("Transaksi gagal! Saldo tidak mencukupi.")
+    print("=====================")
 
     if transaksi_berhasil == True:
         print("\n===KEQINGTOPUP.COM===")
-        print(f"Player ID: {player_id}")
-        print(f"Game: {game}")
-        print(f"Kategori Top Up: {kategori_topup}")
-        print(f"Metode Pembayaran: {metode_pembayaran}")
-        print(f"Biaya Admin: Rp.{biaya_admin}")
-        print(f"Total Tagihan: Rp.{total_bayar}")
-        print(f"Nominal Pembayaran: Rp.{setoran}")
+        print(f"\nPlayer ID           : {player_id}")
+        print(f"Game                : {game}")
+        print(f"Kategori Top Up     : {kategori_topup}")
+        print(f"Metode Pembayaran   : {metode_pembayaran}")
+        print(f"Biaya Admin         : Rp.{biaya_admin}")
+        print(f"Total Tagihan       : Rp.{total_bayar}")
+        print(f"Nominal Pembayaran  : Rp.{setoran}")
         if ada_kembalian == True:
-            print(f"Kembalian: Rp.{kembalian}")
+            print(f"Kembalian           : Rp.{kembalian}")
         print("\nTerima kasih telah Top Up di KEQINGTOPUP.COM!")
+        print("\n=====================")
 
 
