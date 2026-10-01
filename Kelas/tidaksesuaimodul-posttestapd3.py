@@ -146,16 +146,17 @@ def pembayaran():
         return kembalian, setoran
 
 def print_struk():
-    print(f"\nGame: {game}")
-    print(f"Player ID: {player_id}")
-    print(f"Kategori Topup: {kategori_topup}")
-    print(f"Metode Pembayaran: {metode_pembayaran}")
-    print(f"Biaya Admin: Rp.{biaya_admin}")
-    print(f"Total Tagihan: Rp.{total_biaya}")
-    print(f"\nAnda membayar: Rp.{setoran}")
+    print("\n===KEQINGTOPUP.COM===")
+    print(f"\nGame                : {game}")
+    print(f"Player ID           : {player_id}")
+    print(f"Kategori Topup      : {kategori_topup}")
+    print(f"Metode Pembayaran   : {metode_pembayaran}")
+    print(f"Biaya Admin         : Rp.{biaya_admin}")
+    print(f"Total Tagihan       : Rp.{total_biaya}")
+    print(f"Anda membayar       : Rp.{setoran}")
     if kembalian > 0:
-        print(f"Kembalian: Rp.{kembalian}")
-
+        print(f"Kembalian           : Rp.{kembalian}")
+    print("=======================")
 
 print("\n===KEQINGTOPUP.COM===")
 while True:
