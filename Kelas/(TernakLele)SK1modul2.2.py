@@ -9,6 +9,14 @@
 
 gaji_pokok = 2000000
 data_panen = [{"nama":"MANUSIA PALING SEMPURNA","total setoran":999}]
+data_peternak = []
+
+def show_menu():
+    print("\nMau ngapain hari ini, Peternak Lele?")
+    print("1. Setoran")
+    print("2. Lihat leaderboard")
+    print("3. Lihat data peternak (COMING SOON)")
+    print("4. Tutup program")
 
 def menghitung_gaji():
     nama_karyawan = input("\nMasukkan nama anda: ").upper()    
@@ -69,11 +77,7 @@ def show_leaderboard():
             continue
             
 while True:
-    print("\nMau ngapain hari ini, Peternak Lele?")
-    print("1. Menghitung gaji")
-    print("2. Lihat leaderboard")
-    print("3. COMING SOON (jangan coba-coba)")
-    print("4. Tutup program")
+    show_menu()
 
     pilihan = input(": ")
     if pilihan == "1":
@@ -83,7 +87,7 @@ while True:
     elif pilihan == "3":
         print("Sudah dibilang COMING SOON itu kocak.")
     elif pilihan == "4":
-        print("Dadah!")
+        print("\nDadah!")
         break
     else:
         print("Angka yang dimasukkan tidak valid!")
