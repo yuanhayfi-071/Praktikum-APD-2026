@@ -3,19 +3,17 @@ password_benar = "071"
 saldo = 1000000
 
 kesempatan = 3
-while 0 < kesempatan <= 3:
+while 0 < kesempatan:
     username = input("\nMasukkan username anda: ")
     password = input("Masukkan password anda: ")
     if username == username_benar and password == password_benar:
         print("\nLogin Berhasil!")
         break
-    else: 
-        kesempatan -= 1
-        print(f"\nLogin Gagal! Sisa percobaan {kesempatan}")
-        if kesempatan == 0:
-            print("Akun Anda Terblokir!")
-            exit()
-        continue
+    kesempatan -= 1
+    print(f"\nLogin Gagal! Sisa percobaan {kesempatan}")
+else:
+    print("Akun Anda Terblokir!")
+    exit()
 
 while True:
     valid = False
@@ -35,7 +33,6 @@ while True:
         for char in tarik:
             if "0" <= char <= "9":
                 valid = True
-                continue
             else:
                 valid = False
                 print("Angka tidak valid!")
@@ -52,33 +49,32 @@ while True:
                     print(f"Sisa saldo anda: Rp. {saldo}")
             else:
                 print("Nominal harus kelipatan Rp 50.000")
-                continue
 
     elif opsi == "3":
         setor = input("Masukkan nominal setor (kelipatan Rp.50000): Rp.")
         for char in setor:
             if "0" <= char <= "9":
                 valid = True
-                continue
             else:
-                print("Angka tidak valid!")
                 valid = False
-                continue
-        setor = int(setor)
-        if setor > 0:
-            if setor % 50000 == 0:
-                saldo += setor
-                print(f"Berhasil menyetor Rp.{setor}")
-                print(f"Total saldo anda Rp.{saldo}")
+                break
+        if valid == True:        
+            setor = int(setor)
+            if setor > 0:
+                if setor % 50000 == 0:
+                    saldo += setor
+                    print(f"Berhasil menyetor Rp.{setor}")
+                    print(f"Total saldo anda: Rp.{saldo}")
+                else:
+                    print("Nominal harus kelipatan Rp 50.000")
             else:
-                print("Nominal harus kelipatan Rp 50.000")
+                print("Nominal setor harus lebih dari 0!")
         else:
-            print("Nonimal setor tidak boleh kurang dari 0!")
+            print("Nominal harus berupa angka!")
 
     elif opsi == "4":
         print("Terima kasih!")
-        exit()
+        break
 
     else:
         print("Opsi tidak ditemukan!")
-        continue
