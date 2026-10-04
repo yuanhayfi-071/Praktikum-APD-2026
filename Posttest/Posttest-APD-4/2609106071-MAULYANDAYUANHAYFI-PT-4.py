@@ -29,7 +29,7 @@ while True:
         print(f"Saldo anda: Rp. {saldo}")
 
     elif opsi == "2":
-        tarik = input("\nMasukkan nominal tarik (kelipatan Rp.50000): Rp.")
+        tarik = input("\nMasukkan nominal tarik (kelipatan Rp.50.000): Rp.")
         for char in tarik:
             if "0" <= char <= "9":
                 valid = True
@@ -39,8 +39,8 @@ while True:
                 break
         if valid == True:
             tarik = int(tarik)
-            if tarik % 50000 == 0:
-                if tarik > saldo and 0 <= tarik:
+            if tarik % 50000 == 0 and tarik > 0:
+                if tarik > saldo:
                     print("Saldo anda tidak mecukupi!")
                     print(f"Sisa saldo: Rp. {saldo}")
                 else:
@@ -48,10 +48,10 @@ while True:
                     print("Transaksi Berhasil!")
                     print(f"Sisa saldo anda: Rp. {saldo}")
             else:
-                print("Nominal harus kelipatan Rp 50.000")
+                print("Nominal harus kelipatan Rp.50.000 dan tidak boleh 0!")
 
     elif opsi == "3":
-        setor = input("Masukkan nominal setor (kelipatan Rp.50000): Rp.")
+        setor = input("Masukkan nominal setor (kelipatan Rp.50.000): Rp.")
         for char in setor:
             if "0" <= char <= "9":
                 valid = True
@@ -60,15 +60,12 @@ while True:
                 break
         if valid == True:        
             setor = int(setor)
-            if setor > 0:
-                if setor % 50000 == 0:
-                    saldo += setor
-                    print(f"Berhasil menyetor Rp.{setor}")
-                    print(f"Total saldo anda: Rp.{saldo}")
-                else:
-                    print("Nominal harus kelipatan Rp 50.000")
+            if setor > 0 and setor % 50000 == 0:
+                saldo += setor
+                print(f"Berhasil menyetor Rp.{setor}")
+                print(f"Total saldo anda: Rp.{saldo}")
             else:
-                print("Nominal setor harus lebih dari 0!")
+                print("Nominal setor harus kelipatan Rp.50.000 dan lebih dari 0!")
         else:
             print("Nominal harus berupa angka!")
 
