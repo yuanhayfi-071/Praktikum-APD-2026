@@ -57,6 +57,7 @@ while True:
                 valid = True
             else:
                 valid = False
+                print("Angka tidak valid!")
                 break
         if valid == True:        
             setor = int(setor)
@@ -66,8 +67,6 @@ while True:
                 print(f"Total saldo anda: Rp.{saldo}")
             else:
                 print("Nominal setor harus kelipatan Rp.50.000 dan lebih dari 0!")
-        else:
-            print("Nominal harus berupa angka!")
 
     elif opsi == "4":
         print("Terima kasih!")
