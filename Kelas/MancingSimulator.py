@@ -77,6 +77,8 @@ def tampilkan_aqu():
                 return
             else:
                 print("Index tidak ditemukan.")
+        elif bagian[0] == "tutup":
+            break
         else:
             print("Perintah tidak dikenali.")
 
