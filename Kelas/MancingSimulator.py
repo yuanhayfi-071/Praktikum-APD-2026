@@ -38,9 +38,13 @@ item = [
 
 def login():
    global logged_in
-   player_name = input("Namaku adalah: ").upper()
-   logged_in = True
-   return player_name
+   while True:
+        player_name = input("Beri nama akuarium.\n> ").upper()
+        if len(player_name) == 0:
+            print("Nama tidak boleh kosong.")
+            continue
+        print(f"\nAkuarium {player_name} dibuat!")
+        return player_name
 
 def menu():
     print("\n=====MANCING.SIMULATOR=====")
@@ -131,6 +135,10 @@ def tambahke_aqu(tangkapan):
 
 # def bersihkan_aqu():
 
+def inventori():
+    for i, barang in enumerate(inventory, start=1):
+        print(f"{i}. {barang['nama']} x{barang['jumlah']}")
+
 while True:
     if not logged_in:
         player_name = login()
@@ -148,7 +156,6 @@ while True:
             print("Membuka toko...")
         elif hasil == "inventori":
             print("Membuka inventori...")
-            for i, barang in enumerate(inventory, start=1):
-                print(f"{i}. {barang['nama']} x{barang['jumlah']}")
+            inventori()
         else:
             print("Perintah tidak dikenal!")

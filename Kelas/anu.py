@@ -54,12 +54,27 @@
 
 # deadline_logma = (17,0,0) #jadi tuple.
 
-import time
-while True:
-    universe.create()
-    if time.time() == ???:
-        terminate()
-        exit()
-    universe.run()
-    universe.end()
+# import time
+# while True:
+#     universe.create()
+#     if time.time() == ???:
+#         terminate()
+#         exit()
+#     universe.run()
+#     universe.end()
     
+Saldo_Narendra_NIM = 12000
+CMUjungPulpen_Narendra_NIM = 0
+SebelumnyaTertutup = True
+
+while True:
+    pencet = input("Ketik 'ya' untuk memencet pulpen.\n> ")
+    if pencet.strip().lower() == "ya" and SebelumnyaTertutup:
+        CMUjungPulpen_Narendra_NIM += 1
+    elif pencet.strip().lower() == "ya" and not SebelumnyaTertutup:
+        CMUjungPulpen_Narendra_NIM = 0
+
+    if CMUjungPulpen_Narendra_NIM > 0 and SebelumnyaTertutup:
+        Saldo_Narendra_NIM += 5000
+        print("Rp.5.000 barus saja ditransfer ke saldo Anda.")
+    SebelumnyaTertutup = (CMUjungPulpen_Narendra_NIM == 0)
