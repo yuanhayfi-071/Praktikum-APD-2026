@@ -36,11 +36,3 @@ while True:
         Saldo_Narendra_NIM += 5000
         print("\nRp.5.000 barus saja ditransfer ke saldo Anda.")
     SebelumnyaTertutup = (CMUjungPulpen_Narendra_NIM == 0)
-
-kuiskalkulus = []
-jawabanNarendra_NIM = []
-kunciJawaban_kuisKalkulus_Cipto = []
-
-while True:
-    for i in range(len(kuiskalkulus)):
-        jawabanNarendra_NIM[i] = kunciJawaban_kuisKalkulus_Cipto[i]
