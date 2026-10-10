@@ -2,6 +2,9 @@
 hari = 1
 stress = 25 #Death flag: stress >= 100
 mora = 100 #Objektif: bayar utang 1k Mora di hari ke-8
+RESTVAL = [20, 40]
+TIMESTRESSVAL = [10, 15]
+DEADLSTRESS = 50
 
 #Settingan waktu
 waktu = ["Siang","Malam"]
@@ -11,23 +14,25 @@ indekswaktu = 0
 proyek = []
 portofolio = []
 waitlist = []
-pos_job = [{"nproyek":"Desain Rumah Nyaman","bayaran":50,"tenggat":3}]
+pos_job = [{"nproyek":"Desain Rumah Nyaman","stresscost":5,"bayaran":50,"tenggat":2}]
 
 #Intro game
 print("\nKaveh adalah arsitek baik hati, emosional, idealis, dan butuh mora.")
 print("Ia punya utang 1k Mora yang harus dibayar 7 hari lagi!")
 print("Namun, Kaveh tiba-tiba dirasuki makhluk asing dari dunia lain...")
-print(f"\nKetik 'lh' untuk melihat perintah.")
+print(f"HINT: Bekerja menambah stress ({TIMESTRESSVAL[0]}/{TIMESTRESSVAL[1]}) di (siang/malam),"
+      f"sedangkan Beristirahat mengurangi ({RESTVAL[0]}/{RESTVAL[1]}) di (siang/malam).")
+print(f"Ketik 'lh' untuk melihat perintah.")
 
 while True: #Main loop
     if len(pos_job) == 1 and len(portofolio) >= 3: #Kontrol porto
         pos_job.extend([
-            {"nproyek":"Desain Rumah Mewah","bayaran":125,"tenggat":5}, 
-            {"nproyek":"Desain Toko Mewah","bayaran":100,"tenggat":5}
+            {"nproyek":"Desain Rumah Mewah","stresscost":15,"bayaran":125,"tenggat":3}, 
+            {"nproyek":"Desain Toko Mewah","stresscost":10,"bayaran":115,"tenggat":3}
             ])
         
     if hari < 8 and stress < 100: #Kontrol game
-        print(f"\n[Hari ke-{hari}: {waktu[indekswaktu]}] [{mora} Mora]")
+        print(f"\n[Hari ke-{hari}: {waktu[indekswaktu]}] [{mora}/1000 Mora]")
         perintah = input("\n> ")
 
         if perintah.strip().lower() == "lh":
@@ -59,7 +64,7 @@ while True: #Main loop
             print("\nMengecek papan informasi...")
             print("\n+ \nTAWARAN PROYEK")
             for i, item in enumerate(pos_job, start=1):
-                print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
+                print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
 
             while True: #Mengambil kerja
                 opsi = input("\nKetik 'ladd' satu atau beberapa '[INDEX]' untuk mengambil kerjaan atau 'cancel'.\n> ").lower()
@@ -70,6 +75,7 @@ while True: #Main loop
                     print("\nPergi dari papan informasi...")
                     break
                 elif bagian[0] == "ladd" and all(x.isdigit() for x in bagian[1:len(bagian)]):
+                    waitlist.clear()
                     for x in bagian[1:len(bagian)]:
                         i = int(x)
                         if 1 <= i <= len(pos_job):
@@ -81,15 +87,16 @@ while True: #Main loop
                         print("\nMemilih proyek:")
                         waitlist.sort(key=lambda k:k['nproyek'])
                         for i, item in enumerate(waitlist, start=1):
-                            print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
-                        confirm = input("\nKetik 'confirm' untuk konfirmasi atau 'cancel'.\n> ")
-                        if confirm.strip().lower() == 'confirm':
-                            print("\nDikonfirmasi!")
-                            proyek.extend(waitlist)
-                            waitlist.clear()
-                        elif confirm.strip().lower() == 'cancel':
-                            print("\nDibatalkan!")
-                            waitlist.clear()
+                            print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
+                        while True:    
+                            confirm = input("\nKetik 'confirm' untuk konfirmasi atau 'cancel'.\n> ")
+                            if confirm.strip().lower() == 'confirm':
+                                print("\nDikonfirmasi!")
+                                proyek.extend(waitlist)
+                                break
+                            elif confirm.strip().lower() == 'cancel':
+                                print("\nDibatalkan!")
+                                break
 
         elif perintah.strip().lower() == "lp":
                 while True:
@@ -99,7 +106,7 @@ while True: #Main loop
                     else:
                         print(f"\nProyek:")
                         for i, item in enumerate(proyek, start=1):
-                            print(f"{i}. {item['nproyek']} | {item['bayaran']} | Tenggat: {item['tenggat']}")
+                            print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Stress: {item['stresscost']} | Tenggat: {item['tenggat']}")
                                         
                         opsi = input("\nKetik satu '[INDEX]' untuk dituntaskan atau 'cancel'.\n> ")
                         if opsi == "cancel":
@@ -114,28 +121,23 @@ while True: #Main loop
                                 print(f"{terselesaikan['nproyek']} terselesaikan!")
                                 mora += terselesaikan['bayaran']
                                 print(f"Mora +{terselesaikan['bayaran']}")
-
-                                if indekswaktu == 1:
-                                    stress += 10
-                                    print("Stress +10")
-                                else:
-                                    stress += 5
-                                    print("Stress +5")
+                                stress += TIMESTRESSVAL[indekswaktu] + terselesaikan['stresscost']
+                                print(f"Stress +{(TIMESTRESSVAL[indekswaktu]) + terselesaikan['stresscost']}")
 
                                 indekswaktu = (indekswaktu + 1) % len(waktu)
-                                print("\nWaktu berlalu...")
+                                print(f"\nWaktu berlalu... Sekarang {waktu[indekswaktu]}.")
                                 if indekswaktu == 0:
+                                    print("Sehari terlewati...")
                                     hari += 1
-                                    sisa = []
+                                    sisa = [] #Menampung proyek2 yg tenggatnya blm habis saat disaring
                                     for i, item in enumerate(proyek):
                                         item['tenggat'] -= 1
                                         if item['tenggat'] <= 0:
-                                            stress += 50
-                                            print(f"Tenggat {item['nproyek']} terlewat! Stress +50")
+                                            stress += DEADLSTRESS
+                                            print(f"Tenggat {item['nproyek']} terlewat! Stress +{DEADLSTRESS}")
                                         else:
                                             sisa.append(item)
                                     proyek[:] = sisa
-                                    print("Sehari terlewati...")
                                 if stress >= 100 or hari >= 8:
                                     break
                                     
@@ -147,26 +149,27 @@ while True: #Main loop
         elif perintah.strip().lower() == "lr":
             print("Kaveh memilih tidur di rumah...")
 
+            stress -= RESTVAL[indekswaktu]
+            if stress < 0:
+                stress = 0
+
             indekswaktu = (indekswaktu + 1) % len(waktu)
-            print("\nWaktu berlalu...")
+            print(f"\nWaktu berlalu... Sekarang {waktu[indekswaktu]}.")
             if indekswaktu == 0:
+                print("Sehari terlewati...")
                 hari += 1
                 sisa = []
                 for i, item in enumerate(proyek):
                     item['tenggat'] -= 1
                     if item['tenggat'] <= 0:
-                        stress += 50
-                        print(f"Tenggat {item['nproyek']} terlewat! Stress +50")
+                        stress += DEADLSTRESS
+                        print(f"Tenggat {item['nproyek']} terlewat! Stress +{DEADLSTRESS}")
                     else:
                         sisa.append(item)
                 proyek[:] = sisa
-                print("Sehari terlewati...")
-                if stress >= 100 or hari >= 8:
-                    continue
+            if stress >= 100 or hari >= 8:
+                continue
 
-            stress -= 50
-            if stress < 0:
-                stress = 0
             print("Kaveh merasa segar kembali!")
             print(f"Tingkat stress: {stress}")
 
