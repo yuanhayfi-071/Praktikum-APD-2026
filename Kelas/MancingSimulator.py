@@ -86,7 +86,6 @@ def tampilkan_aqu():
         else:
             print("Perintah tidak dikenali.")
 
-
 # def beli():
 
 def jual(item):
