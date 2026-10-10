@@ -1,7 +1,7 @@
 #Settingan game
 hari = 1
 stress = 25 #Death flag: stress >= 100
-mora = 100 #Objektif: bayar utang 1k Mora di hari ke-12
+mora = 100 #Objektif: bayar utang 1k Mora di hari ke-8
 
 #Settingan waktu
 waktu = ["Siang","Malam"]
@@ -26,7 +26,7 @@ while True: #Main loop
             {"nproyek":"Desain Toko Mewah","bayaran":100,"tenggat":5}
             ])
         
-    if hari < 8 and stress < 100: #Kontrol menu
+    if hari < 8 and stress < 100: #Kontrol game
         print(f"\n[Hari ke-{hari}: {waktu[indekswaktu]}] [{mora} Mora]")
         perintah = input("\n> ")
 
@@ -136,8 +136,9 @@ while True: #Main loop
                                             sisa.append(item)
                                     proyek[:] = sisa
                                     print("Sehari terlewati...")
-                                    if stress >= 100 or hari >= 8:
-                                        break
+                                if stress >= 100 or hari >= 8:
+                                    break
+                                    
                             else:
                                 print("Indeks tidak ditemukan!")
                         else:
