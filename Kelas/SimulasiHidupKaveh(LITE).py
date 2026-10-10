@@ -20,7 +20,7 @@ pos_job = [{"nproyek":"Desain Rumah Nyaman","stresscost":5,"bayaran":50,"tenggat
 print("\nKaveh adalah arsitek baik hati, emosional, idealis, dan butuh mora.")
 print("Ia punya utang 1k Mora yang harus dibayar 7 hari lagi!")
 print("Namun, Kaveh tiba-tiba dirasuki makhluk asing dari dunia lain...")
-print(f"HINT: Bekerja menambah stress ({TIMESTRESSVAL[0]}/{TIMESTRESSVAL[1]}) di (siang/malam),"
+print(f"\nHINT: Bekerja menambah stress ({TIMESTRESSVAL[0]}/{TIMESTRESSVAL[1]}) di (siang/malam),"
       f"sedangkan Beristirahat mengurangi ({RESTVAL[0]}/{RESTVAL[1]}) di (siang/malam).")
 print(f"Ketik 'lh' untuk melihat perintah.")
 
@@ -45,6 +45,7 @@ while True: #Main loop
 
         elif perintah.strip().lower() == "ld":
             print("\n+ \nDETAIL STATUS")
+            print(f"Mora: {mora}")
             print(f"Stress: {stress}")
             if not proyek:
                 print(f"\nProyek kosong, masih nganggur!")
@@ -53,7 +54,7 @@ while True: #Main loop
                 for i, item in enumerate(proyek, start=1):
                     print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
             if not portofolio:
-                print(f"Portofolio kosong, ayo kerja!")
+                print(f"\nPortofolio kosong, ayo kerja!")
             else:
                 print(f"\nPortofolio:")
                 for i, item in enumerate(portofolio, start=1):
@@ -65,6 +66,7 @@ while True: #Main loop
             print("\n+ \nTAWARAN PROYEK")
             for i, item in enumerate(pos_job, start=1):
                 print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
+            print("+")
 
             while True: #Mengambil kerja
                 opsi = input("\nKetik 'ladd' satu atau beberapa '[INDEX]' untuk mengambil kerjaan atau 'cancel'.\n> ").lower()
@@ -152,6 +154,9 @@ while True: #Main loop
             stress -= RESTVAL[indekswaktu]
             if stress < 0:
                 stress = 0
+            print(f"Stress -{RESTVAL[indekswaktu]}")
+            print("Kaveh merasa segar kembali!")
+            print(f"Tingkat stress: {stress}")
 
             indekswaktu = (indekswaktu + 1) % len(waktu)
             print(f"\nWaktu berlalu... Sekarang {waktu[indekswaktu]}.")
@@ -170,10 +175,8 @@ while True: #Main loop
             if stress >= 100 or hari >= 8:
                 continue
 
-            print("Kaveh merasa segar kembali!")
-            print(f"Tingkat stress: {stress}")
-
     elif stress >= 100: #Death flag
+        print(f"Tingkat stress: {stress}")
         print("\nKaveh jatuh dalam keterpurukan.")
         print("GAME OVER!")
         break

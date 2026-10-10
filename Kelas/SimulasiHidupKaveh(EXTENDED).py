@@ -13,10 +13,9 @@ projek = []
 portofolio = []
 
 #Detail status
-mood = "Netral"
-status = []
-karmabaik = 0 #>50, bepergian bisa dapat mora, cari kerja lancar
-karmaburuk = 0 #>75, bepergian malam bisa dijambret
+mood = "Netral" #: sedih, ceroboh & tidak efisiesn; senang, kreatif & efisien
+status = [] #: mabuk, rawan dijambret; dikutuk, ;diberkati
+karma = 0 # <25, bepergian bisa dapat mora, nyari kerja lancar; >50, bepergian malam bisa dijambret
 
 #Intro game
 print("\nKaveh adalah arsitek baik hati, emosional, idealis, dan butuh uang.")
@@ -39,8 +38,7 @@ while True:
         print(f"\n=====DETAIL====="
               f"\nStatus = {status}"
               f"\nMood = {mood}"
-              f"\nKarma Baik = {karmabaik}"
-              f"\nKarma Buruk = {karmaburuk}\n")
+              f"\nKarma = {karma}")
         if not projek:
             print("Projek = Kosong, masih nganggur")
         else:
