@@ -3,7 +3,7 @@ visa = 0 # Tiap cur_planet punya deadline visa yg berbeda.
 money = 1000000
 cur_planet = "O-Edo" # cur_planet starter
 
-# Map
+# Setting game
 items = {
     "Fuel": {"base_price":50},
     "Plant": {"base_price":20},
@@ -23,6 +23,8 @@ planets = {
         "mod_price":{"Fuel":0.5, "Plant":1.2, "Tobacco":0.8}
     },
 }
+
+warehouse = {} # blm diimplementasikan
 
 # Mekanik game
 def travel():
@@ -80,18 +82,25 @@ def openshop_andpick(money, cur_planet):
     show_window(cur_planet)
     option = input("\nKetik beli atau jual.\n> ")
     if option == "beli":
-        namaitem = list(items)
-        pick = int(input("Ketik satu [INDEX] barang.\n> "))
-        if 1 <= pick <= len(planets[cur_planet]["stock"]):
-            local_price = get_price(namaitem[pick], cur_planet)
+        avail_stock = planets[cur_planet]["stock"]
+        pick = input("Ketik [INDEX] barang.\n> ")
+        # bikin bulk buying (bagian.split())
+        if 1 <= int(pick) <= len(avail_stock):
+            item = avail_stock[pick-1]
+            local_price = get_price(item, cur_planet)
             money = buying(money, local_price,cur_planet)
+            # tambah isi warehouse
         else:
             print("Barang tidak ditemukan.")
 
     elif option == "jual":
-        pick = int(input("Ketik nama satu barang yang ingin dijual.\n> "))
-        local_price = get_price(namaitem[pick], cur_planet)
+        # avail_stock = for the warehouse implementation
+        pick = input("Ketik [INDEX] barang yang ingin dijual.\n> ")
+        # bikin bulk selling (bagian.split())
+        local_price = get_price(pick, cur_planet)
         money = selling(money, local_price, cur_planet)
+        # kurangi isi warehouse
+
     return money
 
 # Intro game
