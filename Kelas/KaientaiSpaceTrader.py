@@ -48,18 +48,22 @@ def mto_base(amount, cur_planet): # Hitung local price dalam base
 def get_price(item, cur_planet): # Hitung local price
     return items[item]["base_price"] * planets[cur_planet]["mod_price"][item]
 
-def buying(local_price, cur_planet):
+def buying(money, local_price, cur_planet):
     price_inbase = mto_base(local_price, cur_planet)
     if money >= price_inbase:
         money -= price_inbase
         print("\nBerhasil membeli!")
         print(f"Uang: {money}")
+    else:
+        print("Uang tidak cukup!")
+    return(money)
 
-def selling(local_price, cur_planet):
+def selling(money, local_price, cur_planet):
     price_inbase = mto_base(local_price, cur_planet)
     money += price_inbase
     print("\nBerhasil menjual!")
     print(f"Uang: {money}")
+    return money
 
 def show_window(cur_planet):
     print(f"\nSTOK PLANET {cur_planet.upper()}")
@@ -72,20 +76,23 @@ def show_window(cur_planet):
         local_price = get_price(item, cur_planet)
         print(f"- {item}: {local_price} (x{planets[cur_planet]['mod_price'][item]})")
 
-def openshop_andpick(cur_planet):
+def openshop_andpick(money, cur_planet):
     show_window(cur_planet)
-
     option = input("\nKetik beli atau jual.\n> ")
     if option == "beli":
-        pick = input("Ketik satu [INDEX] barang.\n> ")
-        if 1 <= int(pick) <= len(planets[cur_planet]["stock"]):
-            buying(get_price(items[pick],cur_planet),cur_planet)
+        namaitem = list(items)
+        pick = int(input("Ketik satu [INDEX] barang.\n> "))
+        if 1 <= pick <= len(planets[cur_planet]["stock"]):
+            local_price = get_price(namaitem[pick], cur_planet)
+            money = buying(money, local_price,cur_planet)
         else:
             print("Barang tidak ditemukan.")
 
     elif option == "jual":
-        pick = input("Ketik nama satu barang yang ingin dijual.\n> ")
-        selling(get_price(pick, cur_planet), cur_planet)
+        pick = int(input("Ketik nama satu barang yang ingin dijual.\n> "))
+        local_price = get_price(namaitem[pick], cur_planet)
+        money = selling(money, local_price, cur_planet)
+    return money
 
 # Intro game
 print("\nKamu adalah Sakamoto Tatsuma, kapten dari Kaientai Space Trading Company.")
@@ -94,12 +101,18 @@ print("Suatu hari, wakil kapten Mutsu yang selalu mengerjakan pekerjaanmu"\
 
 while True:
     print(f"\nPlanet: {cur_planet} | Uang: {money} | Uang lokal: {mto_local(money, cur_planet)}")
-    pilihan = input("Ketik 'khelp' untuk melihat perintah.\n> ")
-    if pilihan == "khelp":
+    pilihan = input("Ketik 'khelp' untuk melihat perintah.\n> ").split()
+    if not pilihan:
+        continue
+    elif pilihan[0] == "khelp":
         print("\nPERINTAH")
         print("1. kt    -> travel" \
               "\n2. ks  -> shop di planet ini")
-    elif pilihan == "kt":
+    elif pilihan[0] == "kt":
         cur_planet = travel()
-    elif pilihan == "ks":
-        openshop_andpick(cur_planet)
+    elif pilihan[0] == "ks": 
+        hasil = openshop_andpick(money, cur_planet)
+        if hasil != None:
+            money = hasil
+    else:
+        print("Perintah tidak ditemukan!")
