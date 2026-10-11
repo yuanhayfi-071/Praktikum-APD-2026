@@ -77,7 +77,7 @@ def walk_home():
         print("Mau ngapain di rumah?")
         print("1. Menyibukkan diri"
         "\n2. Tidur")
-        if indekswaktu == "Sore":
+        if indekswaktu >= 3:
             print("\n3. Ganggu Alhaitham")
         kegiatan = input("\n> ")
 
@@ -93,7 +93,7 @@ def walk_home():
                     print(f"Stress +{ADDSTRESS[0]}")
                     stress += ADDSTRESS[0]
             else:
-                if indekswaktu == "Pagi":
+                if indekswaktu == 0:
                     print("\nAlhaitham melihat kamu membuka sketsa di ruang kerja dan pergi tanpa bilang apa-apa.")
                     print("Stress -5")
                     terselesaikan = proyek.pop([0])
@@ -102,7 +102,7 @@ def walk_home():
                     stress -= 5
                     alhaitham_rew = True
 
-            if indekswaktu == "Malam" and alhaitham_rew == True:
+            if indekswaktu == 4 and alhaitham_rew == True:
                 print("\nAlhaitham memberikanmu secangkir kopi hangat.")
                 print("Stress -20")
                 stress -= 20
@@ -132,8 +132,6 @@ def proyekan():
         portofolio.append(terselesaikan)
         stress -= 15
         print(f"Stress -15")
-        #Kegiatan selesai, pergantian jam
-        indekswaktu = (indekswaktu + 1) % len(waktu)
 
 #Intro game
 print("\nKaveh adalah arsitek baik hati, emosional, idealis, dan butuh uang.")
