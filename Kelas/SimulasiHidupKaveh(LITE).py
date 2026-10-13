@@ -1,3 +1,5 @@
+import os
+
 #Settingan login
 data_login = {
     "admin":{"pw":"admin123", "akses":"admin"}
@@ -110,6 +112,7 @@ while True: #Main loop
                 break
 
             elif perintah.strip().lower() == "lh":
+                os.system('cls')
                 print("\n+ \nPERINTAH")
                 print("ld   -> Detail status" \
                     "\nljs  -> Cari kerja" \
@@ -121,6 +124,7 @@ while True: #Main loop
                 print("+")
 
             elif perintah.strip().lower() == "ld":
+                os.system('cls')
                 print("\n+ \nDETAIL STATUS")
                 print(f"Mora: {mora}")
                 print(f"Stress: {stress}")
@@ -139,6 +143,7 @@ while True: #Main loop
                 print("+")
 
             elif perintah.strip().lower() == "ljs":
+                os.system('cls')
                 print("\nMengecek papan informasi...")
                 print("\n+ \nTAWARAN PROYEK")
                 for i, item in enumerate(pos_job, start=1):
@@ -147,10 +152,11 @@ while True: #Main loop
 
                 while True: #Mengambil kerja
                     opsi = input("\nKetik 'ladd' satu atau beberapa '[INDEX]' untuk mengambil kerjaan atau 'cancel'.\n> ").lower()
-                    bagian = opsi.strip()
+                    bagian = opsi.split()
                     if not bagian:
                         continue
                     elif bagian[0] == "cancel":
+                        os.system('cls')
                         print("\nPergi dari papan informasi...")
                         break
                     elif bagian[0] == "ladd" and all(x.isdigit() for x in bagian[1:len(bagian)]):
@@ -163,6 +169,7 @@ while True: #Main loop
                             print("Indeks tidak ditemukan!")
                             continue
                         else:
+                            os.system('cls')
                             print("\nMemilih proyek:")
                             waitlist.sort(key=lambda k:k['nproyek'])
                             for i, item in enumerate(waitlist, start=1):
@@ -185,6 +192,7 @@ while True: #Main loop
                             print("\nproyek kosong, masih nganggur!")
                             break
                         else:
+                            os.system('cls')
                             print(f"\nproyek:")
                             for i, item in enumerate(proyek, start=1):
                                 print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Stress: {item['stresscost']} | Tenggat: {item['tenggat']}")
@@ -196,6 +204,7 @@ while True: #Main loop
                             elif opsi.isdigit():
                                 opsi = int(opsi)
                                 if 1 <= opsi <= len(proyek):
+                                    os.system('cls')
                                     print("\nKaveh bekerja dengan rajin...")
                                     terselesaikan = proyek.pop(opsi-1)
                                     portofolio.append(terselesaikan)
@@ -228,6 +237,7 @@ while True: #Main loop
                                 print("Indeks harus berupa satu angka!")
 
             elif perintah.strip().lower() == "lr":
+                os.system('cls')
                 print("Kaveh memilih tidur di rumah...")
 
                 stress -= RESTVAL[indekswaktu]
@@ -254,6 +264,7 @@ while True: #Main loop
 
             elif perintah.strip().lower() == "led" and admin == True:
                 while True:
+                    os.system('cls')
                     print("\nSISTEM")
                     print(f"1. Batas hari   : {bathari}"\
                         f"\n2. Batas stress : {batstress}"\
@@ -350,7 +361,7 @@ while True: #Main loop
                                     if pindex == "kembali":
                                         break
                                     
-                                    elif pindex.isdigit() and 0 <= int(pindex-1) < len(all_job):
+                                    elif pindex.isdigit() and 0 <= int(pindex) -1 < len(all_job):
                                         selected_job = all_job[int(pindex)-1]
                                         print("\nAtribut yang bisa diedit:"\
                                             f"\n1. Nama Proyek  -> 'nproyek'"\
@@ -362,9 +373,11 @@ while True: #Main loop
                                             natribut = input(f"\nMasukkan nilai {atribut} baru: ")
                                             if atribut != 'nproyek' and natribut.isdigit() and int(natribut) > 0:
                                                 selected_job[atribut] = int(natribut)
-                                                print(f"\n{selected_job} | {selected_job[atribut]} diubah menjadi {natribut}!")
+                                                print(f"\nMengedit {selected_job['nproyek']} | Nilai awal: {selected_job[atribut]}, Nilai akhir: {natribut}!")
+                                                break
                                             elif atribut == 'nproyek':
                                                 selected_job[atribut] = natribut
+                                                break
                                             else:
                                                 print("Nilai harus berupa angka dan lebih dari 0.")
                                         else:
@@ -413,6 +426,7 @@ while True: #Main loop
 
             elif perintah.strip().lower() == "lusd" and admin == True:
                 while True:    
+                    os.system('cls')
                     print("\nDAFTAR PENGGUNA")
                     for i, user in enumerate(data_login,start=1):
                         print(f"{i}. {user} | Akses: {data_login[user]['akses']}")
@@ -424,14 +438,17 @@ while True: #Main loop
                     elif pilihan == "lacs":
                         nama = input("\nKetik nama akun yang ingin diubah.\n> ").strip().lower()
                         if nama in data_login:
-                            akses_ubahke = input("Ketik untuk mengubah akses ke 'admin' atau 'member'.\n> ")
-                            if akses_ubahke == "admin" or akses_ubahke == "member":
-                                if data_login[nama]["akses"] != akses_ubahke:
-                                    data_login[nama]["akses"] = akses_ubahke
-                                else:
-                                    print(f"Akses {nama} sudah {akses_ubahke}.")
+                            if nama == input_usn:
+                                print("Tidak bisa menghapus akun yang sedang digunakan.")
                             else:
-                                print(f"Akses {akses_ubahke} tidak ditemukan.")
+                                akses_ubahke = input("Ketik untuk mengubah akses ke 'admin' atau 'member'.\n> ")
+                                if akses_ubahke == "admin" or akses_ubahke == "member":
+                                    if data_login[nama]["akses"] != akses_ubahke:
+                                        data_login[nama]["akses"] = akses_ubahke
+                                    else:
+                                        print(f"Akses {nama} sudah {akses_ubahke}.")
+                                else:
+                                    print(f"Akses {akses_ubahke} tidak ditemukan.")
                         else:
                             print("Indeks tidak ditemukan.")
                     
@@ -461,6 +478,7 @@ while True: #Main loop
             game_selesai = True
         
         elif hari >= bathari: #Ending
+            os.system('cls')
             print(f"\nHari ke-{bathari-1} telah berlalu. Saatnya bayar utang.")
             if mora < utang:
                 print(f"Bad ending! Mora {mora} kurang dari {utang}.") 
