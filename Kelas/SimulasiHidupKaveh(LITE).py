@@ -1,4 +1,5 @@
 import os
+import time
 
 #Settingan login
 data_login = {
@@ -28,6 +29,8 @@ while True: #Main loop
     intro = True
 
     while not logged_in:
+        time.sleep(2)
+        os.system('cls')
         print("\nSilahkan masuk ke akun anda.")
         print("1. Sudah punya akun -> Log in")
         print("2. Belum punya akun -> Sign in")
@@ -65,9 +68,10 @@ while True: #Main loop
         else:
             print("Opsi tidak ditemukan.")
 
-    hari = 1 # Inisialisasi progress pemain
-    stress = 25 #Death flag: stress >= 100
-    mora = 100 #Objektif: bayar utang 1k Mora di hari ke-8
+    # Inisialisasi progress pemain
+    hari = 1
+    stress = 25 
+    mora = 100
     waktu = ["Siang","Malam"]
     indekswaktu = 0
     proyek = []
@@ -102,7 +106,7 @@ while True: #Main loop
         else:
             pos_job = all_job[:1]
             
-        if hari < bathari and stress < batstress: #Siklus utama game
+        if hari < bathari and stress < batstress: #Siklus menu game
             print(f"\nKetik 'lh' untuk melihat perintah atau 'kembali' ke halaman login.")
             print(f"[Hari ke-{hari}/{bathari}: {waktu[indekswaktu]}] [{mora}/{utang} Mora]")
             perintah = input("> ")
@@ -112,6 +116,7 @@ while True: #Main loop
                 break
 
             elif perintah.strip().lower() == "lh":
+                time.sleep(2)
                 os.system('cls')
                 print("\n+ \nPERINTAH")
                 print("ld   -> Detail status" \
@@ -124,12 +129,13 @@ while True: #Main loop
                 print("+")
 
             elif perintah.strip().lower() == "ld":
+                time.sleep(2)
                 os.system('cls')
                 print("\n+ \nDETAIL STATUS")
                 print(f"Mora: {mora}")
                 print(f"Stress: {stress}")
                 if not proyek:
-                    print(f"\nproyek kosong, masih nganggur!")
+                    print(f"\nProyek kosong, masih nganggur!")
                 else:
                     print(f"\nproyek:")
                     for i, item in enumerate(proyek, start=1):
@@ -143,6 +149,7 @@ while True: #Main loop
                 print("+")
 
             elif perintah.strip().lower() == "ljs":
+                time.sleep(2)
                 os.system('cls')
                 print("\nMengecek papan informasi...")
                 print("\n+ \nTAWARAN PROYEK")
@@ -187,56 +194,55 @@ while True: #Main loop
                         print("Perintah tidak dikenali.")
 
             elif perintah.strip().lower() == "lp":
-                    while True:
-                        if not proyek:
-                            print("\nproyek kosong, masih nganggur!")
-                            break
-                        else:
-                            os.system('cls')
-                            print(f"\nproyek:")
-                            for i, item in enumerate(proyek, start=1):
-                                print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Stress: {item['stresscost']} | Tenggat: {item['tenggat']}")
-                                            
-                            opsi = input("\nKetik satu '[INDEX]' untuk dituntaskan atau 'cancel'.\n> ")
-                            if opsi.strip().lower() == "cancel":
-                                print("\nBatal bekerja...")
-                                break
-                            elif opsi.isdigit():
-                                opsi = int(opsi)
-                                if 1 <= opsi <= len(proyek):
-                                    os.system('cls')
-                                    print("\nKaveh bekerja dengan rajin...")
-                                    terselesaikan = proyek.pop(opsi-1)
-                                    portofolio.append(terselesaikan)
-                                    print(f"{terselesaikan['nproyek']} terselesaikan!")
-                                    mora += terselesaikan['bayaran']
-                                    print(f"Mora +{terselesaikan['bayaran']}")
-                                    stress += TIMESTRESSVAL[indekswaktu] + terselesaikan['stresscost']
-                                    print(f"Stress +{(TIMESTRESSVAL[indekswaktu]) + terselesaikan['stresscost']}")
-
-                                    indekswaktu = (indekswaktu + 1) % len(waktu)
-                                    print(f"\nWaktu berlalu... Sekarang {waktu[indekswaktu]}.")
-                                    if indekswaktu == 0:
-                                        print("Sehari terlewati...")
-                                        hari += 1
-                                        sisa = [] #Menampung proyek2 yg tenggatnya blm habis saat disaring
-                                        for i, item in enumerate(proyek):
-                                            item['tenggat'] -= 1
-                                            if item['tenggat'] <= 0:
-                                                stress += DEADLSTRESS
-                                                print(f"Tenggat {item['nproyek']} terlewat! Stress +{DEADLSTRESS}")
-                                            else:
-                                                sisa.append(item)
-                                        proyek[:] = sisa
-                                    if stress >= batstress or hari >= bathari:
-                                        break
+                while True:
+                    if not proyek:
+                        print("\nProyek kosong, masih nganggur!")
+                        break
+                    else:
+                        time.sleep(2)
+                        os.system('cls')
+                        print(f"\nproyek:")
+                        for i, item in enumerate(proyek, start=1):
+                            print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Stress: {item['stresscost']} | Tenggat: {item['tenggat']}")
                                         
-                                else:
-                                    print("Indeks tidak ditemukan!")
-                            else:
-                                print("Indeks harus berupa satu angka!")
+                        opsi = input("\nKetik satu '[INDEX]' untuk dituntaskan atau 'cancel'.\n> ")
+                        if opsi.strip().lower() == "cancel":
+                            print("\nBatal bekerja...")
+                            break
+                        elif opsi.isdigit() and 1 <= int(opsi) <= len(proyek):
+                            opsi = int(opsi)
+                            time.sleep(2)
+                            os.system('cls')
+                            print("\nKaveh bekerja dengan rajin...")
+                            terselesaikan = proyek.pop(opsi-1)
+                            portofolio.append(terselesaikan)
+                            print(f"{terselesaikan['nproyek']} terselesaikan!")
+                            mora += terselesaikan['bayaran']
+                            print(f"Mora +{terselesaikan['bayaran']}")
+                            stress += TIMESTRESSVAL[indekswaktu] + terselesaikan['stresscost']
+                            print(f"Stress +{(TIMESTRESSVAL[indekswaktu]) + terselesaikan['stresscost']}")
+
+                            indekswaktu = (indekswaktu + 1) % len(waktu)
+                            print(f"\nWaktu berlalu... Sekarang {waktu[indekswaktu]}.")
+                            if indekswaktu == 0:
+                                print("Sehari terlewati...")
+                                hari += 1
+                                sisa = [] #Menampung proyek2 yg tenggatnya blm habis saat disaring
+                                for i, item in enumerate(proyek):
+                                    item['tenggat'] -= 1
+                                    if item['tenggat'] <= 0:
+                                        stress += DEADLSTRESS
+                                        print(f"Tenggat {item['nproyek']} terlewat! Stress +{DEADLSTRESS}")
+                                    else:
+                                        sisa.append(item)
+                                proyek[:] = sisa
+                            if stress >= batstress or hari >= bathari:
+                                break
+                        else:
+                            print("Indeks tidak ditemukan!")
 
             elif perintah.strip().lower() == "lr":
+                time.sleep(2)
                 os.system('cls')
                 print("Kaveh memilih tidur di rumah...")
 
@@ -264,6 +270,7 @@ while True: #Main loop
 
             elif perintah.strip().lower() == "led" and admin == True:
                 while True:
+                    time.sleep(2)
                     os.system('cls')
                     print("\nSISTEM")
                     print(f"1. Batas hari   : {bathari}"\
@@ -277,7 +284,6 @@ while True: #Main loop
                     print(f"5. Hari ke- :{hari}"\
                         f"\n6. Mora     : {mora}"\
                         f"\n7. Stress   : {stress}")
-                
                 
                     pilih_edit = input("\nKetik [INDEKS] pengaturan untuk diedit atau 'kembali'.\n> ")
                     if pilih_edit == "kembali":
@@ -426,6 +432,7 @@ while True: #Main loop
 
             elif perintah.strip().lower() == "lusd" and admin == True:
                 while True:    
+                    time.sleep(2)
                     os.system('cls')
                     print("\nDAFTAR PENGGUNA")
                     for i, user in enumerate(data_login,start=1):
@@ -434,14 +441,14 @@ while True: #Main loop
                     
                     if pilihan == "kembali":
                         break
-                    
+    
                     elif pilihan == "lacs":
                         nama = input("\nKetik nama akun yang ingin diubah.\n> ").strip().lower()
                         if nama in data_login:
                             if nama == input_usn:
-                                print("Tidak bisa menghapus akun yang sedang digunakan.")
+                                print("Tidak bisa mengedit akun yang sedang digunakan.")
                             else:
-                                akses_ubahke = input("Ketik untuk mengubah akses ke 'admin' atau 'member'.\n> ")
+                                akses_ubahke = input("Ketik untuk mengubah akses ke 'admin' atau 'member'.\n> ").strip().lower()
                                 if akses_ubahke == "admin" or akses_ubahke == "member":
                                     if data_login[nama]["akses"] != akses_ubahke:
                                         data_login[nama]["akses"] = akses_ubahke
@@ -478,6 +485,7 @@ while True: #Main loop
             game_selesai = True
         
         elif hari >= bathari: #Ending
+            time.sleep(2)
             os.system('cls')
             print(f"\nHari ke-{bathari-1} telah berlalu. Saatnya bayar utang.")
             if mora < utang:

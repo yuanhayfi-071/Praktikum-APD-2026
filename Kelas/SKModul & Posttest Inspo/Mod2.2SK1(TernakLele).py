@@ -7,16 +7,39 @@
 # Buatkan program yang dapat menghitung total gaji karyawan tersebut dan
 # tampilkan hasilnya!
 
+import time
+import os
+
 gaji_pokok = 2000000
 data_panen = [{"nama":"MANUSIA PALING SEMPURNA","total setoran":999}]
 data_peternak = []
 
+def clear_term():
+    print("\nMembersihkan terminal...")
+    time.sleep(2)
+    os.system('cls')
+
 def show_menu():
+    clear_term()
     print("\nMau ngapain hari ini, Peternak Lele?")
     print("1. Setoran")
     print("2. Lihat leaderboard")
     print("3. Lihat data peternak (COMING SOON)")
     print("4. Tutup program")
+
+def processing_menu():
+    pilihan = input(": ")
+    if pilihan == "1":
+        addto_data()
+    elif pilihan == "2":
+        show_leaderboard()
+    elif pilihan == "3":
+        print("Sudah dibilang COMING SOON itu kocak.")
+    elif pilihan == "4":
+        print("\nDadah!")
+        exit()
+    else:
+        print("Angka yang dimasukkan tidak valid!")
 
 def menghitung_gaji():
     nama_karyawan = input("\nMasukkan nama anda: ").upper()    
@@ -78,16 +101,4 @@ def show_leaderboard():
             
 while True:
     show_menu()
-
-    pilihan = input(": ")
-    if pilihan == "1":
-        addto_data()
-    elif pilihan == "2":
-        show_leaderboard()
-    elif pilihan == "3":
-        print("Sudah dibilang COMING SOON itu kocak.")
-    elif pilihan == "4":
-        print("\nDadah!")
-        break
-    else:
-        print("Angka yang dimasukkan tidak valid!")
+    processing_menu()
