@@ -7,13 +7,11 @@ data_login = {
 }
 
 #Settingan game
-bathari = 8
-batstress = 100
-utang = 1000
-batporto = 3
 RESTVAL = [20, 40]
 TIMESTRESSVAL = [10, 15]
 DEADLSTRESS = 50
+
+pengaturan = {"bhari": 8, "bstress": 100, "utang": 1000, "bporto": 3}
 
 #Setting kerjaan
 all_job = [
@@ -82,8 +80,8 @@ while True: #Main loop
     while logged_in:
         if game_selesai == True:
             print(f"\nHASIL SIMULASI {input_usn}")
-            print(f"Hari    : {hari}/{bathari}"\
-                  f"\nMora    : {mora}/{utang}")
+            print(f"Hari    : {hari}/{pengaturan['bhari']}"\
+                  f"\nMora    : {mora}/{pengaturan['utang']}")
             while True:
                 kembali = input("\nKetik 'kembali' untuk ke halaman login.\n> ").strip().lower()
                 if kembali == "kembali":
@@ -95,20 +93,20 @@ while True: #Main loop
             if admin == True:
                 print("\n===========BERMAIN DALAM MODE ADMIN===========")
             print("\nKaveh adalah arsitek baik hati, emosional, idealis, dan butuh mora.")
-            print(f"Ia punya utang {utang} Mora yang harus dibayar {bathari-1} hari lagi!")
+            print(f"Ia punya utang {pengaturan['utang']} Mora yang harus dibayar {pengaturan['bhari']-1} hari lagi!")
             print("Namun, Kaveh tiba-tiba dirasuki makhluk asing dari dunia lain...")
             print(f"\nHINT: Bekerja menambah stress ({TIMESTRESSVAL[0]}/{TIMESTRESSVAL[1]}) di (siang/malam), "
             f"sedangkan Beristirahat mengurangi ({RESTVAL[0]}/{RESTVAL[1]}) di (siang/malam).")
             intro = False
  
-        if len(portofolio) >= batporto: #Kontrol porto
+        if len(portofolio) >= pengaturan['bporto']: #Kontrol porto
             pos_job = all_job
         else:
             pos_job = all_job[:1]
             
-        if hari < bathari and stress < batstress: #Siklus menu game
+        if hari < pengaturan['bhari'] and stress < pengaturan['bstress']: #Siklus menu game
             print(f"\nKetik 'lh' untuk melihat perintah atau 'kembali' ke halaman login.")
-            print(f"[Hari ke-{hari}/{bathari}: {waktu[indekswaktu]}] [{mora}/{utang} Mora]")
+            print(f"[Hari ke-{hari}/{pengaturan['bhari']}: {waktu[indekswaktu]}] [{mora}/{pengaturan['utang']} Mora]")
             perintah = input("> ")
 
             if perintah.strip().lower() == "kembali":
@@ -116,7 +114,6 @@ while True: #Main loop
                 break
 
             elif perintah.strip().lower() == "lh":
-                time.sleep(2)
                 os.system('cls')
                 print("\n+ \nPERINTAH")
                 print("ld   -> Detail status" \
@@ -129,7 +126,6 @@ while True: #Main loop
                 print("+")
 
             elif perintah.strip().lower() == "ld":
-                time.sleep(2)
                 os.system('cls')
                 print("\n+ \nDETAIL STATUS")
                 print(f"Mora: {mora}")
@@ -158,11 +154,11 @@ while True: #Main loop
                 print("+")
 
                 while True: #Mengambil kerja
-                    opsi = input("\nKetik 'ladd' satu atau beberapa '[INDEX]' untuk mengambil kerjaan atau 'cancel'.\n> ").lower()
+                    opsi = input("\nKetik 'ladd' satu atau beberapa '[INDEX]' untuk mengambil kerjaan atau 'kembali'.\n> ").lower()
                     bagian = opsi.split()
                     if not bagian:
                         continue
-                    elif bagian[0] == "cancel":
+                    elif bagian[0] == "kembali":
                         os.system('cls')
                         print("\nPergi dari papan informasi...")
                         break
@@ -182,12 +178,12 @@ while True: #Main loop
                             for i, item in enumerate(waitlist, start=1):
                                 print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
                             while True:    
-                                confirm = input("\nKetik 'confirm' untuk konfirmasi atau 'cancel'.\n> ")
+                                confirm = input("\nKetik 'confirm' untuk konfirmasi atau 'kembali'.\n> ")
                                 if confirm.strip().lower() == 'confirm':
                                     print("\nDikonfirmasi!")
                                     proyek.extend(waitlist)
                                     break
-                                elif confirm.strip().lower() == 'cancel':
+                                elif confirm.strip().lower() == 'kembali':
                                     print("\nDibatalkan!")
                                     break
                     else:
@@ -205,8 +201,8 @@ while True: #Main loop
                         for i, item in enumerate(proyek, start=1):
                             print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Stress: {item['stresscost']} | Tenggat: {item['tenggat']}")
                                         
-                        opsi = input("\nKetik satu '[INDEX]' untuk dituntaskan atau 'cancel'.\n> ")
-                        if opsi.strip().lower() == "cancel":
+                        opsi = input("\nKetik satu '[INDEX]' untuk dituntaskan atau 'kembali'.\n> ")
+                        if opsi.strip().lower() == "kembali":
                             print("\nBatal bekerja...")
                             break
                         elif opsi.isdigit() and 1 <= int(opsi) <= len(proyek):
@@ -236,7 +232,7 @@ while True: #Main loop
                                     else:
                                         sisa.append(item)
                                 proyek[:] = sisa
-                            if stress >= batstress or hari >= bathari:
+                            if stress >= pengaturan['bstress'] or hari >= pengaturan['bhari']:
                                 break
                         else:
                             print("Indeks tidak ditemukan!")
@@ -273,9 +269,9 @@ while True: #Main loop
                     time.sleep(2)
                     os.system('cls')
                     print("\nSISTEM")
-                    print(f"1. Batas hari   : {bathari}"\
-                        f"\n2. Batas stress : {batstress}"\
-                        f"\n3. Utang        : {utang}"\
+                    print(f"1. Batas hari   : {pengaturan['bhari']}"\
+                        f"\n2. Batas stress : {pengaturan['bstress']}"\
+                        f"\n3. Utang        : {pengaturan['utang']}"\
                         f"\n4. Semua proyek : ")
                     for item in all_job:
                         print(f"- {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
@@ -289,41 +285,18 @@ while True: #Main loop
                     if pilih_edit == "kembali":
                         break
 
-                    elif pilih_edit == "1":
+                    elif pilih_edit in ["1", "2", "3"]:
+                        kunci = list(pengaturan)[int(pilih_edit) - 1]
                         while True:
-                            nbathari = input("\nMasukkan batas hari baru atau 'kembali': ")
-                            if nbathari == "kembali":
+                            baru = input(f"\nMasukkan nilai baru untuk pengaturan {pilih_edit} atau 'kembali': ")
+                            if baru == "kembali":
                                 break
-                            elif nbathari.isdigit() and int(nbathari) > 0:
-                                bathari = int(nbathari)
-                                print(f"Batas hari diubah menjadi {bathari}.")
+                            elif baru.isdigit() and int(baru) > 0:
+                                pengaturan[kunci] = int(baru)
+                                print(f"Pengaturan {pilih_edit} diubah menjadi {pengaturan[kunci]}.")
                                 break
                             else:
-                                print("Batas hari harus berupa angka dan lebih dari 0.")
-                    
-                    elif pilih_edit == "2":
-                        while True:
-                            nbatstress = input("\nMasukkan batas stress baru atau 'kembali': ")
-                            if nbatstress == "kembali":
-                                break
-                            elif nbatstress.isdigit() and int(nbatstress) > 0:
-                                batstress = int(nbatstress)
-                                print(f"Batas stress diubah menjadi {batstress}.")
-                                break
-                            else:
-                                print("Batas stress harus berupa angka dan lebih dari 0.") 
-                    
-                    elif pilih_edit == "3":
-                        while True:
-                            nutang = input("\nMasukkan utang baru atau 'kembali': ")
-                            if nutang == "kembali":
-                                break
-                            elif nutang.isdigit() and int(nutang) > 0:
-                                utang = int(nutang)
-                                print(f"Utang diubah menjadi {utang}.")
-                                break
-                            else:
-                                print("Utang harus berupa angka dan lebih dari 0.")
+                                print("Nilai harus berupa angka dan lebih dari 0.")
                     
                     elif pilih_edit == "4":
                         while True:
@@ -376,10 +349,11 @@ while True: #Main loop
                                             f"\n4. Tenggat      -> 'tenggat'")
                                         atribut = input("\nKetik nama atribut untuk diedit.\n> ")
                                         if atribut in selected_job:
+                                            patribut = selected_job[atribut]
                                             natribut = input(f"\nMasukkan nilai {atribut} baru: ")
                                             if atribut != 'nproyek' and natribut.isdigit() and int(natribut) > 0:
                                                 selected_job[atribut] = int(natribut)
-                                                print(f"\nMengedit {selected_job['nproyek']} | Nilai awal: {selected_job[atribut]}, Nilai akhir: {natribut}!")
+                                                print(f"\nMengedit {selected_job['nproyek']} | Nilai awal: {patribut}, Nilai akhir: {natribut}!")
                                                 break
                                             elif atribut == 'nproyek':
                                                 selected_job[atribut] = natribut
@@ -408,7 +382,7 @@ while True: #Main loop
                             nmora = input("\nMasukkan mora baru atau 'kembali': ")
                             if nmora == "kembali":
                                 break
-                            elif nmora.isdigit():
+                            elif nmora.isdigit() and int(nmora) >= 0:
                                 mora = int(nmora)
                                 print(f"Mora diubah menjadi {mora}.")
                                 break
@@ -466,30 +440,30 @@ while True: #Main loop
                                 print("Tidak bisa menghapus akun yang sedang digunakan.")
                             else:
                                 while True:
-                                    confirmhapus = input(f"Ketik 'confirm' untuk menghapus {nama} atau 'cancel'.\n> ").strip().lower()
+                                    confirmhapus = input(f"Ketik 'confirm' untuk menghapus {nama} atau 'kembali'.\n> ").strip().lower()
                                     if confirmhapus == "confirm":
                                         del data_login[nama]
                                         print(f"Pengguna {nama} dihapus!")
                                         break
-                                    elif confirmhapus == "cancel":
+                                    elif confirmhapus == "kembali":
                                         break
                         else:
                             print("Indeks tidak ditemukan.")
                     else:
                         print("Perintah tidak ditemukan.")
 
-        elif stress >= batstress: #Death flag
+        elif stress >= pengaturan['bstress']: #Death flag
             print(f"Tingkat stress: {stress}")
             print("\nKaveh jatuh dalam keterpurukan.")
             print("GAME OVER!")
             game_selesai = True
         
-        elif hari >= bathari: #Ending
+        elif hari >= pengaturan['bhari']: #Ending
             time.sleep(2)
             os.system('cls')
-            print(f"\nHari ke-{bathari-1} telah berlalu. Saatnya bayar utang.")
-            if mora < utang:
-                print(f"Bad ending! Mora {mora} kurang dari {utang}.") 
+            print(f"\nHari ke-{pengaturan['bhari']-1} telah berlalu. Saatnya bayar utang.")
+            if mora < pengaturan['utang']:
+                print(f"Bad ending! Mora {mora} kurang dari {pengaturan['utang']}.") 
                 print(f"Kaveh harus berlutut pada Alhaitham!")
             else:
                 print(f"Good ending! Mora {mora}. Kaveh membayar utangnya pada Alhaitham.")
