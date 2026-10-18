@@ -27,7 +27,6 @@ while True: #Main loop
     intro = True
 
     while not logged_in:
-        time.sleep(2)
         os.system('cls')
         print("\nSilahkan masuk ke akun anda.")
         print("1. Sudah punya akun -> Log in")
@@ -50,21 +49,24 @@ while True: #Main loop
             
         elif opsi == "2":
             while True:
-                input_usn = input("\nMasukkan nama pengguna baru: ").strip().lower()
-                if len(input_usn.strip()) == 0:
-                    print("Nama pengguna tidak boleh kosong.")
-                    continue
-                else:
+                input_usn = input("\nKetik nama pengguna baru atau 'kembali'.\n> ").strip().lower()
+                usn_exist = data_login.get(input_usn)
+                if input_usn == "kembali":
+                    print("Mengembalikan ke halaman login...")
                     break
-            usn_exist = data_login.get(input_usn)
-            if usn_exist is None:
-                input_pw = input("Masukkan password baru: ")
-                data_login.update({input_usn: {"pw":input_pw, "akses":"member"}})
-                print(f"Akun {input_usn} berhasil dibuat!")
-            else:
-                print(f"Nama pengguna {input_usn} sudah ada.")
+                elif len(input_usn.strip()) == 0:
+                    print("Nama pengguna tidak boleh kosong.")
+                elif usn_exist:
+                    print(f"Nama pengguna {input_usn} sudah ada.")
+                else:
+                    input_pw = input("Masukkan password baru: ")
+                    data_login.update({input_usn: {"pw":input_pw, "akses":"member"}})
+                    print(f"\nAkun {input_usn} berhasil dibuat!")
+                    print("Mengembalikan ke halaman login...")
+                    break
         else:
             print("Opsi tidak ditemukan.")
+        time.sleep(2)
 
     # Inisialisasi progress pemain
     hari = 1
@@ -191,12 +193,11 @@ while True: #Main loop
 
             elif perintah.strip().lower() == "lp":
                 while True:
+                    os.system('cls')
                     if not proyek:
                         print("\nProyek kosong, masih nganggur!")
                         break
                     else:
-                        time.sleep(2)
-                        os.system('cls')
                         print(f"\nproyek:")
                         for i, item in enumerate(proyek, start=1):
                             print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Stress: {item['stresscost']} | Tenggat: {item['tenggat']}")
@@ -236,9 +237,9 @@ while True: #Main loop
                                 break
                         else:
                             print("Indeks tidak ditemukan!")
+                time.sleep(2)
 
             elif perintah.strip().lower() == "lr":
-                time.sleep(2)
                 os.system('cls')
                 print("Kaveh memilih tidur di rumah...")
 
@@ -263,10 +264,10 @@ while True: #Main loop
                         else:
                             sisa.append(item)
                     proyek[:] = sisa
+                time.sleep(2)
 
             elif perintah.strip().lower() == "led" and admin == True:
                 while True:
-                    time.sleep(2)
                     os.system('cls')
                     print("\nSISTEM")
                     print(f"1. Batas hari   : {pengaturan['bhari']}"\
@@ -403,10 +404,10 @@ while True: #Main loop
                     
                     else:
                         print("Indeks tidak ditemukan.")
+                    time.sleep(2)
 
             elif perintah.strip().lower() == "lusd" and admin == True:
                 while True:    
-                    time.sleep(2)
                     os.system('cls')
                     print("\nDAFTAR PENGGUNA")
                     for i, user in enumerate(data_login,start=1):
@@ -417,21 +418,22 @@ while True: #Main loop
                         break
     
                     elif pilihan == "lacs":
-                        nama = input("\nKetik nama akun yang ingin diubah.\n> ").strip().lower()
+                        nama = input("\nKetik nama akun untuk diubah aksesnya.\n> ").strip().lower()
                         if nama in data_login:
                             if nama == input_usn:
                                 print("Tidak bisa mengedit akun yang sedang digunakan.")
                             else:
-                                akses_ubahke = input("Ketik untuk mengubah akses ke 'admin' atau 'member'.\n> ").strip().lower()
+                                akses_ubahke = input("\nKetik untuk mengubah akses ke 'admin' atau 'member'.\n> ").strip().lower()
                                 if akses_ubahke == "admin" or akses_ubahke == "member":
                                     if data_login[nama]["akses"] != akses_ubahke:
+                                        print(f"Akses {nama} diubah menjadi {akses_ubahke}.")
                                         data_login[nama]["akses"] = akses_ubahke
                                     else:
                                         print(f"Akses {nama} sudah {akses_ubahke}.")
                                 else:
                                     print(f"Akses {akses_ubahke} tidak ditemukan.")
                         else:
-                            print("Indeks tidak ditemukan.")
+                            print("Akun tidak ditemukan.")
                     
                     elif pilihan == "lrem":
                         nama = input("\nKetik nama akun yang ingin dihapus.\n> ").strip().lower()
@@ -440,7 +442,7 @@ while True: #Main loop
                                 print("Tidak bisa menghapus akun yang sedang digunakan.")
                             else:
                                 while True:
-                                    confirmhapus = input(f"Ketik 'confirm' untuk menghapus {nama} atau 'kembali'.\n> ").strip().lower()
+                                    confirmhapus = input(f"\nKetik 'confirm' untuk menghapus {nama} atau 'kembali'.\n> ").strip().lower()
                                     if confirmhapus == "confirm":
                                         del data_login[nama]
                                         print(f"Pengguna {nama} dihapus!")
@@ -448,9 +450,10 @@ while True: #Main loop
                                     elif confirmhapus == "kembali":
                                         break
                         else:
-                            print("Indeks tidak ditemukan.")
+                            print("Akun tidak ditemukan.")
                     else:
                         print("Perintah tidak ditemukan.")
+                    time.sleep(2)
 
         elif stress >= pengaturan['bstress']: #Death flag
             print(f"Tingkat stress: {stress}")
