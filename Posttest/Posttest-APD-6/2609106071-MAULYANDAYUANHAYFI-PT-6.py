@@ -28,41 +28,48 @@ while True: #Main loop
 
     while not logged_in:
         os.system('cls')
-        print("\nSilahkan masuk ke akun anda.")
+        print("\n","="*5,"SIMULASI HIDUP KAVEH", "="*5)
+        print("Silahkan masuk ke akun anda.")
         print("1. Sudah punya akun -> Log in")
         print("2. Belum punya akun -> Sign in")
         opsi = input(": ")
         if opsi == "1":
-            input_usn = input("\nUsername: ").strip().lower()
-            input_pw = input("Password: ")
-            usn_exist = data_login.get(input_usn)
-            if usn_exist is None:
-                print(f"Nama pengguna {input_usn} tidak ditemukan.")
-                continue
-            elif input_pw == data_login[input_usn]["pw"]:
-                logged_in = True
-                if usn_exist["akses"] == "admin":
-                    admin = True
-                print(f"Login berhasil. Selamat datang, {input_usn}!")
-            else:
-                print("Password salah.")
+            while True:
+                input_usn = input("\nMasukkan nama pengguna atau '/kembali'.\n> ").strip().lower()
+                usn_exist = data_login.get(input_usn)
+                if input_usn == '/kembali':
+                    print("Membersihkan terminal...")
+                    time.sleep(1.5)
+                    break
+                elif usn_exist is None:
+                    print(f"Nama pengguna {input_usn} tidak ditemukan.")
+                    continue
+                input_pw = input("Masukkan password.\n> ")
+                if input_pw == data_login[input_usn]["pw"]:
+                    logged_in = True
+                    if usn_exist["akses"] == "admin":
+                        admin = True
+                    print(f"Login berhasil. Selamat datang, {input_usn}!")
+                    break
+                else:
+                    print("Password salah!")
             
         elif opsi == "2":
             while True:
-                input_usn = input("\nKetik nama pengguna baru atau 'kembali'.\n> ").strip().lower()
+                input_usn = input("\nMasukkan nama pengguna baru atau '/kembali'.\n> ").strip().lower()
                 usn_exist = data_login.get(input_usn)
-                if input_usn == "kembali":
-                    print("Mengembalikan ke halaman login...")
+                if input_usn == "/kembali":
+                    print("Membersihkan terminal...")
                     break
                 elif len(input_usn.strip()) == 0:
                     print("Nama pengguna tidak boleh kosong.")
                 elif usn_exist:
                     print(f"Nama pengguna {input_usn} sudah ada.")
                 else:
-                    input_pw = input("Masukkan password baru: ")
+                    input_pw = input("Masukkan password baru.\n> ")
                     data_login.update({input_usn: {"pw":input_pw, "akses":"member"}})
                     print(f"\nAkun {input_usn} berhasil dibuat!")
-                    print("Mengembalikan ke halaman login...")
+                    print("Membersihkan terminal...")
                     break
         else:
             print("Opsi tidak ditemukan.")
@@ -81,9 +88,10 @@ while True: #Main loop
 
     while logged_in:
         if game_selesai == True:
-            print(f"\nHASIL SIMULASI {input_usn}")
+            print("\n","="*5,f"HASIL SIMULASI {input_usn}","="*5)
             print(f"Hari    : {hari}/{pengaturan['bhari']}"\
-                  f"\nMora    : {mora}/{pengaturan['utang']}")
+                f"\nMora    : {mora}/{pengaturan['utang']}"\
+                f"\nStress  : {stress}/{pengaturan['bstress']}")
             while True:
                 kembali = input("\nKetik 'kembali' untuk ke halaman login.\n> ").strip().lower()
                 if kembali == "kembali":
@@ -92,8 +100,10 @@ while True: #Main loop
             break
 
         if intro == True: #Intro day 1
+            time.sleep(1.5)
+            os.system('cls')
             if admin == True:
-                print("\n===========BERMAIN DALAM MODE ADMIN===========")
+                print("\n","="*5,"BERMAIN DALAM MODE ADMIN","="*5)
             print("\nKaveh adalah arsitek baik hati, emosional, idealis, dan butuh mora.")
             print(f"Ia punya utang {pengaturan['utang']} Mora yang harus dibayar {pengaturan['bhari']-1} hari lagi!")
             print("Namun, Kaveh tiba-tiba dirasuki makhluk asing dari dunia lain...")
@@ -147,15 +157,13 @@ while True: #Main loop
                 print("+")
 
             elif perintah.strip().lower() == "ljs":
-                time.sleep(2)
-                os.system('cls')
                 print("\nMengecek papan informasi...")
-                print("\n+ \nTAWARAN PROYEK")
-                for i, item in enumerate(pos_job, start=1):
-                    print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
-                print("+")
-
-                while True: #Mengambil kerja
+                while True:
+                    os.system('cls')
+                    print("\n+ \nTAWARAN PROYEK")
+                    for i, item in enumerate(pos_job, start=1):
+                        print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
+                    print("+")
                     opsi = input("\nKetik 'ladd' satu atau beberapa '[INDEX]' untuk mengambil kerjaan atau 'kembali'.\n> ").lower()
                     bagian = opsi.split()
                     if not bagian:
@@ -190,6 +198,7 @@ while True: #Main loop
                                     break
                     else:
                         print("Perintah tidak dikenali.")
+                    time.sleep(1.5)
 
             elif perintah.strip().lower() == "lp":
                 while True:
@@ -198,19 +207,19 @@ while True: #Main loop
                         print("\nProyek kosong, masih nganggur!")
                         break
                     else:
-                        print(f"\nproyek:")
+                        print(f"\nProyek:")
                         for i, item in enumerate(proyek, start=1):
                             print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Stress: {item['stresscost']} | Tenggat: {item['tenggat']}")
                                         
                         opsi = input("\nKetik satu '[INDEX]' untuk dituntaskan atau 'kembali'.\n> ")
                         if opsi.strip().lower() == "kembali":
-                            print("\nBatal bekerja...")
+                            print("Batal bekerja...")
                             break
                         elif opsi.isdigit() and 1 <= int(opsi) <= len(proyek):
                             opsi = int(opsi)
+                            print("Kaveh bekerja dengan rajin...")
                             time.sleep(2)
                             os.system('cls')
-                            print("\nKaveh bekerja dengan rajin...")
                             terselesaikan = proyek.pop(opsi-1)
                             portofolio.append(terselesaikan)
                             print(f"{terselesaikan['nproyek']} terselesaikan!")
@@ -237,11 +246,12 @@ while True: #Main loop
                                 break
                         else:
                             print("Indeks tidak ditemukan!")
-                time.sleep(2)
+                        time.sleep(2)
+                        os.system('cls')
 
             elif perintah.strip().lower() == "lr":
-                os.system('cls')
                 print("Kaveh memilih tidur di rumah...")
+                os.system('cls')
 
                 stress -= RESTVAL[indekswaktu]
                 if stress < 0:
@@ -264,7 +274,6 @@ while True: #Main loop
                         else:
                             sisa.append(item)
                     proyek[:] = sisa
-                time.sleep(2)
 
             elif perintah.strip().lower() == "led" and admin == True:
                 while True:
@@ -284,24 +293,25 @@ while True: #Main loop
                 
                     pilih_edit = input("\nKetik [INDEKS] pengaturan untuk diedit atau 'kembali'.\n> ")
                     if pilih_edit == "kembali":
+                        os.system('cls')
                         break
 
                     elif pilih_edit in ["1", "2", "3"]:
-                        kunci = list(pengaturan)[int(pilih_edit) - 1]
+                        indeks = list(pengaturan)[int(pilih_edit) - 1]
                         while True:
                             baru = input(f"\nMasukkan nilai baru untuk pengaturan {pilih_edit} atau 'kembali': ")
                             if baru == "kembali":
                                 break
                             elif baru.isdigit() and int(baru) > 0:
-                                pengaturan[kunci] = int(baru)
-                                print(f"Pengaturan {pilih_edit} diubah menjadi {pengaturan[kunci]}.")
+                                pengaturan[indeks] = int(baru)
+                                print(f"Pengaturan {pilih_edit} diubah menjadi {pengaturan[indeks]}.")
                                 break
                             else:
                                 print("Nilai harus berupa angka dan lebih dari 0.")
                     
                     elif pilih_edit == "4":
                         while True:
-                            pilihan = input("\nKetik 'lnew' untuk menambahkan pekerjaan baru, 'ledj' untuk mengedit,\natau 'kembali': ")
+                            pilihan = input("\nKetik 'lnew' untuk membuat proyek baru, 'ledj' untuk mengedit,\natau 'kembali': ")
                             if pilihan == "kembali":
                                 break
 
@@ -415,6 +425,7 @@ while True: #Main loop
                     pilihan = input("\nKetik 'lacs' untuk mengubah akses, 'lrem' untuk menghapus akun, atau 'kembali'.\n> ").strip().lower()
                     
                     if pilihan == "kembali":
+                        os.system('cls')
                         break
     
                     elif pilihan == "lacs":
