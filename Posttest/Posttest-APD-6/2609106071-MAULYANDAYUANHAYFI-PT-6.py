@@ -158,6 +158,7 @@ while True: #Main loop
 
             elif perintah.strip().lower() == "ljs":
                 print("\nMengecek papan informasi...")
+                time.sleep(1.5)
                 while True:
                     os.system('cls')
                     print("\n+ \nTAWARAN PROYEK")
@@ -169,7 +170,6 @@ while True: #Main loop
                     if not bagian:
                         continue
                     elif bagian[0] == "kembali":
-                        os.system('cls')
                         print("\nPergi dari papan informasi...")
                         break
                     elif bagian[0] == "ladd" and all(x.isdigit() for x in bagian[1:len(bagian)]):
@@ -180,6 +180,7 @@ while True: #Main loop
                                 waitlist.append(pos_job[i-1].copy())
                         if not waitlist:
                             print("Indeks tidak ditemukan!")
+                            time.sleep(1.5)
                             continue
                         else:
                             os.system('cls')
@@ -250,8 +251,8 @@ while True: #Main loop
                         os.system('cls')
 
             elif perintah.strip().lower() == "lr":
-                print("Kaveh memilih tidur di rumah...")
                 os.system('cls')
+                print("Kaveh memilih tidur di rumah...")
 
                 stress -= RESTVAL[indekswaktu]
                 if stress < 0:
@@ -291,7 +292,7 @@ while True: #Main loop
                         f"\n6. Mora     : {mora}"\
                         f"\n7. Stress   : {stress}")
                 
-                    pilih_edit = input("\nKetik [INDEKS] pengaturan untuk diedit atau 'kembali'.\n> ")
+                    pilih_edit = input("\nKetik [INDEKS] pengaturan untuk diedit atau 'kembali'.\n> ").strip().lower()
                     if pilih_edit == "kembali":
                         os.system('cls')
                         break
