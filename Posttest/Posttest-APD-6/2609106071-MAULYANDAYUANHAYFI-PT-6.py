@@ -123,6 +123,7 @@ while True: #Main loop
 
             if perintah.strip().lower() == "kembali":
                 print("\nMengembalikan ke halaman login...")
+                time.sleep(1.5)
                 break
 
             elif perintah.strip().lower() == "lh":
