@@ -41,9 +41,11 @@
 # while True:
 #     try:
 #         usia = input("Masukkan usia.\n> ")
+#         if not usia.isdigit():
+#             raise ValueError('Usia harus berupa angka.')
 #         if int(usia) < 0:
 #             raise ValueError('Usia tidak boleh < 0.')
-#         if usia.isdigit() and int(usia) < 17:
+#         if int(usia) < 17:
 #             raise ValueError('Film khusus dewasa.')
 #     except ValueError as e:
 #         print(e)
@@ -52,4 +54,11 @@
 #     finally:
 #         print("Menutup program...")
 #         exit()
+
+try:
+    umur = int(input("Masukkan umur: "))
+    if type(umur) == int:
+        raise ValueError
+except ValueError as e:
+    print(e)
             
