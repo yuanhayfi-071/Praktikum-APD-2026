@@ -404,13 +404,64 @@ def led():
     elif pilihan == 2:
         edit_project()
 
-def lusd(p):
-    pass
-    # edit_userInfo()
-    # edit_userProgress()
-    # delete_user()
-    # ask_username()
-    # ask_number()
+def show_users():
+    print("\nDAFTAR PENGGUNA")
+    for i, (nama, akun) in enumerate(data_user.items(), start=1):
+        print(f"{i}. {nama} | Akses: {akun['access']}")
+
+def ask_username(prompt, session):
+    """Returns a valid username other than the current one, or None."""
+    nama = input(f"\n{prompt} atau 'kembali'.\n> ").strip().lower()
+    if nama == 'kembali':
+        return None
+    if nama not in data_user:
+        print("Akun tidak ditemukan.")
+        return None
+    if nama == session['username']:
+        print("Tidak bisa mengedit akun yang sedang digunakan.")
+        return None
+    return nama
+
+def change_access(session):
+    nama = ask_username("Ketik nama akun untuk diubah aksesnya", session)
+    if nama is None:
+        return
+    baru = input("\nKetik 'admin' atau 'member'.\n> ").strip().lower()
+    if baru not in ('admin', 'member'):
+        print(f"Akses {baru} tidak ditemukan.")
+    elif data_user[nama]['access'] == baru:
+        print(f"Akses {nama} sudah {baru}.")
+    else:
+        data_user[nama]['access'] = baru
+        print(f"Akses {nama} diubah menjadi {baru}.")
+
+def delete_user(session):
+    nama = ask_username("Ketik nama akun yang ingin dihapus", session)
+    if nama is None:
+        return
+    while True:
+        konfirmasi = input(f"\nKetik 'confirm' untuk menghapus {nama} atau 'kembali'.\n> ").strip().lower()
+        if konfirmasi == 'confirm':
+            del data_user[nama]
+            print(f"Pengguna {nama} dihapus!")
+            return
+        elif konfirmasi == 'kembali':
+            return
+
+def lusd(session):
+    while True:
+        clear_terminal(0, None)
+        show_users()
+        pilihan = input("\nKetik 'lacs' untuk mengubah akses, 'lrem' untuk menghapus akun, atau 'kembali'.\n> ").strip().lower()
+        if pilihan == 'kembali':
+            return
+        elif pilihan == 'lacs':
+            change_access(session)
+        elif pilihan == 'lrem':
+            delete_user(session)
+        else:
+            print("Perintah tidak ditemukan.")
+        time.sleep(1.5)
 
 def game_navigation(session):
     print(f"\nKetik 'lh' untuk melihat perintah atau 'kembali' ke halaman login.")
