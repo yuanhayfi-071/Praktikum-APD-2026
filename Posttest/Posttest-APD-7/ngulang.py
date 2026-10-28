@@ -45,6 +45,12 @@ DEFAULT_PROGRESS = {
     'waitlist':[]
 }
 
+ENDINGS = {
+    'stress_end': "anu",
+    'good_end': "ana",
+    'bad_end': "ani"
+}
+
 def clear_terminal(x=1.5, m=None):
     if m == 'def':
         print('Membersihkan terminal...')
@@ -472,7 +478,7 @@ def game_navigation(session):
     elif perintah == 'lh':
         lh(session)
     elif perintah == 'ld':
-        ld(session)
+        ld()
     elif perintah == 'ljs':
         ljs(session)
     elif perintah == 'lp':
@@ -485,15 +491,26 @@ def game_navigation(session):
     else:
         print("Perintah tidak ditemukan.")
 
+def check_ending(session):
+    if session['progress']['stress'] >= SETTINGS['batas_stress']:
+        return 'stress_end'
+    if session['progress']['hari'] >= SETTINGS['batas_hari'] and session['progress']['mora'] >= SETTINGS['utang_awal']:
+        return 'good_end'
+    if session['progress']['hari'] >= SETTINGS['batas_hari'] and session['progress']['mora'] < SETTINGS['utang_awal']:
+        return 'bad_end'
+    return None
+
 def run_game():
     session = login_menu()
     if not session:
         return
     intro(session)
-    while session['progress']['hari'] <= SETTINGS['batas_hari'] and session['progress']['stress'] < SETTINGS['batas_stress']:
-        hasil = game_navigation(session)
-        if hasil == 'kembali':
-            break
-
+    ending = check_ending(session)
+    if ending:
+        print(ENDINGS[ending])
+    hasil = game_navigation(session)
+    if hasil == 'kembali':
+        return
+    
 while True:
     run_game()
