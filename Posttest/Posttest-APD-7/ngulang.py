@@ -71,28 +71,32 @@ def clear_terminal(x=1.5, m=None):
 
 def ask_number(minimum=None, maximum=None, prompt="Ketik indeks atau 'kembali'.\n> "):
     while True:
-        number = input(f'{prompt}').strip().lower()
-        if number == 'kembali':
+        try:
+            number = input(prompt).strip().lower()
+            if number == 'kembali':
+                return number
+            if not number:
+                raise ValueError('Angka tidak boleh kosong!')
+            if not number.isdigit():
+                raise ValueError('Input harus berupa angka.')
+
+            number = int(number)
+            if minimum is not None and number < minimum:
+                raise ValueError(f'Angka minimal {minimum}.')
+            if maximum is not None and number > maximum:
+                raise ValueError(f'Angka maksimal {maximum}')
             return number
-        if not number:
-            print('Angka tidak boleh kosong!')
-            continue
-        if not number.isdigit():
-            print('Input harus berupa angka.')
-            continue
-
-        number = int(number)
-        if minimum is not None and number < minimum:
-                print(f'Angka minimal {minimum}.')
-                continue
-        if maximum is not None and number > maximum:
-                print(f'Angka maksimal {maximum}')
-                continue
-        return number
-
+        except ValueError as e:
+            print(e)
+            return ask_number(minimum, maximum, prompt)
+    
 def waktu_sekarang(session):
     NAMA_WAKTU = list(SETTINGS['waktu'])
-    return NAMA_WAKTU[session['progress']['indekswaktu']]
+    try:
+        return NAMA_WAKTU[session['progress']['indekswaktu']]
+    except IndexError:
+        session['progress']['indekswaktu'] = 0
+        return NAMA_WAKTU[0]
 
 def login_menu():
     while True:
@@ -166,7 +170,7 @@ def intro(session):
     clear_terminal(1.5, 'Memuat game...')
     print(f"BERMAIN DALAM MODE {session['access'].upper()}")
     print("\nKaveh adalah arsitek baik hati, emosional, idealis, dan butuh mora.")
-    print(f"Ia punya utang {SETTINGS['utang_awal']} Mora yang harus dibayar {SETTINGS['batas_hari']+1} hari lagi!")
+    print(f"Ia punya utang {SETTINGS['utang_awal']} Mora yang harus dibayar {SETTINGS['batas_hari']} hari lagi!")
     print("Namun, Kaveh tiba-tiba dirasuki makhluk asing dari dunia lain...")
     print(f"\nHINT: Bekerja/istirahat menambah/mengurangi stress berbeda di (siang/malam)")  
 
@@ -254,7 +258,7 @@ def ljs(session):
                 while True:    
                     confirm = input("\nKetik 'confirm' untuk konfirmasi atau 'kembali'.\n> ")
                     if confirm.strip().lower() == 'confirm':
-                        print("\nDikonfirmasi!")
+                        print("Dikonfirmasi!")
                         session['progress']['proyek'].extend(session['progress']['waitlist'])
                         break
                     elif confirm.strip().lower() == 'kembali':
@@ -268,10 +272,11 @@ def lp(session):
     clear_terminal(0, None)
     if not session['progress']['proyek']:
         print('Proyek kosong, masih nganggur!')
+        input("Ketik apa saja untuk kembali.\n> ")
         clear_terminal(0, None)
         return
     for i, item in enumerate(session['progress']['proyek'], start=1):
-        print(f"{i}. {item['nproyek']} | stress: {item['stress']} | {item['bayaran']} Mora | tenggat: {item['tenggat']}")
+        print(f"{i}. {item['nproyek']} | {item['bayaran']} Mora | Stress: {item['stresscost']} | Tenggat: {item['tenggat']}")
     opsi = input("\nKetik satu '[INDEX]' untuk dituntaskan atau 'kembali'.\n> ")
     if opsi.strip().lower() == "kembali":
         clear_terminal(0, "\nBatal bekerja...")
@@ -300,37 +305,53 @@ def lr(session):
     print(f"Tingkat stress: {session['progress']['stress']}")
     time_pass(session)
 
-def create_time():
-    print('\nMenambah waktu dalam daftar waktu...')
-    new_value = input('Tambahkan nama waktu.\n> ')
-    print(f'Waktu {new_value} di posisi ke berapa?')
-    new_index = ask_number(1, len(SETTINGS['waktu']), "Ketik indeks atau 'kembali'.\n> ")
-    stress = ask_number(0, None, "Ketik nilai stress atau 'kembali'.\n> ")
-    rest = ask_number(0, None, "Ketik nilai rest atau 'kembali'.\n> ")
-    SETTINGS['waktu'].update({
-        new_value:{'restval':rest, 'timestress':stress}
-    })
-    print(f'Waktu {new_value} berhasil ditambahkan!')
-
 def edit_time():
     print('\nMengubah daftar waktu...')
     nama_waktu = input('Ketik nama waktu.\n> ').strip().title()
-    if nama_waktu in SETTINGS['waktu']:
-        field = input(f'Ketik untuk mengubah nama, restval, atau timestress.').strip().lower()
-        if field == 'nama':
-            new_name = input(f"Mau ubah {SETTINGS['waktu'][nama_waktu]} jadi apa?\n> ").strip().title()
-            print(f"Berhasil mengubah {SETTINGS['waktu'][nama_waktu]} jadi {new_name}!")
-            SETTINGS['waktu'][nama_waktu] = new_name
-        elif field == 'restval' or field == 'timestress':
-            new_value = ask_number(0, None, "Ketik nilai atau 'kembali'.\n> ")
-            print(f"Berhasil mengubah data {SETTINGS['waktu'][nama_waktu]}!")
-            SETTINGS['waktu'][nama_waktu][field] = int(new_value)
+    try:
+        data = SETTINGS['waktu'][nama_waktu]
+    except KeyError:
+        print(f"Waktu '{nama_waktu}' tidak ditemukan!")
+        clear_terminal(1, None)
+        return
+
+    field = input('Ketik untuk mengubah nama, restval, atau timestress.\n> ').strip().lower()
+    if field == 'nama':
+        new_name = input(f"Mau ubah {nama_waktu} jadi apa?\n> ").strip().title()
+        if not new_name:
+            print("Nama tidak boleh kosong!")
+        elif new_name in SETTINGS['waktu']:
+            print(f"Waktu '{new_name}' sudah ada!")
+        else:
+            SETTINGS['waktu'] = {
+                (new_name if k == nama_waktu else k): v
+                for k, v in SETTINGS['waktu'].items()
+            }
+            print(f"Berhasil mengubah {nama_waktu} jadi {new_name}!")
+    elif field in ('restval', 'timestress'):
+        new_value = ask_number(0, None, "Ketik nilai atau 'kembali'.\n> ")
+        if new_value == 'kembali':
+            return
+        data[field] = new_value
+        print(f"Berhasil mengubah {field} {nama_waktu} jadi {new_value}!")
+    else:
+        print("Atribut tidak ditemukan!")
+    clear_terminal(1, None)
 
 def delete_time():
     print("\nMenghapus waktu dari daftar waktu...")
     nama_waktu = input('Ketik nama waktu.\n> ').strip().title()
-    terhapus = SETTINGS['waktu'].pop(nama_waktu)
-    print(f"Berhasil menghapus {terhapus}!")
+    try:
+        if len(SETTINGS['waktu']) <= 1:
+            raise ValueError("Minimal harus ada satu waktu!")
+        SETTINGS['waktu'].pop(nama_waktu)
+    except KeyError:
+        print(f"Waktu '{nama_waktu}' tidak ditemukan!")
+    except ValueError as e:
+        print(e)
+    else:
+        print(f"Berhasil menghapus {nama_waktu}!")
+    clear_terminal(1.5, None)
 
 def edit_value():
     clear_terminal(0, None)
@@ -343,10 +364,8 @@ def edit_value():
     
     choosen_field = list(SETTINGS.keys())[number-1]
     if choosen_field == 'waktu':
-        action = input("Ketik 'tambah', 'ubah', atau 'hapus'.\n> ").strip().lower()
-        if action == 'tambah':
-            create_time()
-        elif action == 'ubah':
+        action = input("Ketik 'ubah' atau 'hapus' waktu.\n> ").strip().lower()
+        if action == 'ubah':
             edit_time()
         elif action == 'hapus':
             delete_time()
@@ -354,39 +373,38 @@ def edit_value():
             print('Perintah tidak dikenali.')
     
     else:
-        print(f"Memilih mengubah {choosen_field}.")
+        print(f"\nMemilih mengubah {choosen_field}.")
         new_value = ask_number(0, None, "Masukkan nilai baru.\n> ")
         if new_value == 'kembali':
             return
         print(f'{choosen_field} telah diubah menjadi {new_value}')
         SETTINGS[choosen_field] = new_value
+        clear_terminal(0, None)
 
 def show_projects():
     for i, item in enumerate(all_project, start=1):
         print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
 
 def create_project():
-    nama = input("Ketik nama proyek baru atau 'kembali'.\n> ").title()
-    if not nama:
-        print("Nama proyek tidak boleh kosong.")
-        return
-    if nama.strip().lower() == 'kembali':
-        return
-
-    project_baru = {'nproyek': nama}
-    for field in PROJECT_FIELDS:
-        nilai = ask_number(1, None, f"Input {PROJECT_FIELDS[field]}.\n> ")
-        if nilai == 'kembali':
-            return
-        project_baru[field] = nilai
+    list_field = list(PROJECT_FIELDS)
+    project_baru = {}
+    for field in list_field:
+        if field == 'nproyek':
+            nama = input("Input nama proyek.\n> ")
+            project_baru.update({'nproyek':nama})
+            continue
+        nilai = ask_number(1, None, f"\nInput {PROJECT_FIELDS[field]}.\n> ")
+        project_baru.update({field:nilai})
 
     all_project.append(project_baru)
     print(f"Proyek'{project_baru}' berhasil dibuat!")
 
 def edit_project_field():
+    clear_terminal(0, None)
     show_projects()
-    indeks = ask_number(1, len(all_project), 'Pilih indeks proyek.\n> ')
+    indeks = ask_number(1, len(all_project), 'Pilih indeks proyek atau \'kembali\'.\n> ')
     if indeks == 'kembali':
+        clear_terminal(0, None)
         return
     project = all_project[indeks - 1]
 
@@ -394,24 +412,25 @@ def edit_project_field():
     print()
     for i, field in enumerate(daftar, start=1):
         print(f"{i}. {PROJECT_FIELDS[field]}")
-    pilihan = ask_number(1, len(daftar), 'Pilih atribut.\n> ')
+    pilihan = ask_number(1, len(daftar), 'Pilih atribut atau \'kembali\'.\n> ')
     if pilihan == 'kembali':
+        clear_terminal(0, None)
         return
     field = daftar[pilihan - 1]
 
     if field == 'nproyek':
-        nilai = input(f"Masukkan nama baru untuk \'{project['nproyek']}\'.\n> ").strip()
+        nilai = input(f"\nMasukkan nama baru untuk \'{project['nproyek']}\'.\n> ").strip()
         if not nilai:
             print('Nama proyek tidak boleh kosong!')
             return
     else:
-        nilai = ask_number(1, None, f"Nilai {PROJECT_FIELDS[field]} baru.")
+        nilai = ask_number(1, None, f"\nMasukkan nilai baru untuk {PROJECT_FIELDS[field]} atau 'kembali'.\n> ")
         if nilai == 'kembali':
             return
 
     lama = project[field]
     project[field] = nilai
-    print(f"\n{PROJECT_FIELDS[field]} berubah: {lama} -> {nilai}")
+    print(f"\nMengubah {PROJECT_FIELDS[field]} dari {lama} menjadi {nilai}.")
 
 def edit_project():
     while True:
@@ -426,6 +445,7 @@ def edit_project():
             print("Perintah tidak dikenali.")
 
 def led():
+    clear_terminal(0, None)
     print("\nEDIT SISTEM\n1. Pengaturan\n2. Proyek")
     pilihan = ask_number(1, 2)
     if pilihan == 1:
@@ -439,7 +459,6 @@ def show_users():
         print(f"{i}. {nama} | Akses: {akun['access']}")
 
 def ask_username(prompt, session):
-    """Returns a valid username other than the current one, or None."""
     nama = input(f"\n{prompt} atau 'kembali'.\n> ").strip().lower()
     if nama == 'kembali':
         return None
@@ -483,6 +502,7 @@ def lusd(session):
         show_users()
         pilihan = input("\nKetik 'lacs' untuk mengubah akses, 'lrem' untuk menghapus akun, atau 'kembali'.\n> ").strip().lower()
         if pilihan == 'kembali':
+            clear_terminal(0, None)
             return
         elif pilihan == 'lacs':
             change_access(session)
@@ -526,9 +546,9 @@ def game_loop(session):
 def check_ending(session):
     if session['progress']['stress'] >= SETTINGS['batas_stress']:
         return 'stress_end'
-    if session['progress']['hari'] >= SETTINGS['batas_hari'] and session['progress']['mora'] >= SETTINGS['utang_awal']:
+    if session['progress']['hari'] > SETTINGS['batas_hari'] and session['progress']['mora'] >= SETTINGS['utang_awal']:
         return 'good_end'
-    if session['progress']['hari'] >= SETTINGS['batas_hari'] and session['progress']['mora'] < SETTINGS['utang_awal']:
+    if session['progress']['hari'] > SETTINGS['batas_hari'] and session['progress']['mora'] < SETTINGS['utang_awal']:
         return 'bad_end'
     return None
 
