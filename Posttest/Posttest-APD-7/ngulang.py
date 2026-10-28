@@ -46,20 +46,26 @@ DEFAULT_PROGRESS = {
 }
 
 ENDINGS = {
-    'stress_end': "anu",
-    'good_end': "ana",
-    'bad_end': "ani"
+    'stress_end': (
+        "\nTingkat stress: {stress}"
+        "\nKaveh jatuh dalam keterpurukan."
+        "\nGAME OVER!"
+    ),
+    'good_end': (
+        "\nHari ke-{batas_hari} telah berlalu. Saatnya bayar utang."
+        "\nGood ending! Mora {mora}."
+        "\nKaveh membayar utangnya pada Alhaitham."
+    ),
+    'bad_end': (
+        "\nHari ke-{batas_hari} telah berlalu. Saatnya bayar utang."
+        "\nBad ending! Mora {mora} kurang dari {utang_awal}."
+        "\nKaveh harus berlutut pada Alhaitham!"
+    )
 }
 
 def clear_terminal(x=1.5, m=None):
-    if m == 'def':
-        print('Membersihkan terminal...')
-    elif m == 'ljs':
-        print('Mengecek papan informasi...')
-    elif m == 'lp':
-        print('Kaveh bekerja dengan rajin...')
-    elif m == 'lr':
-        print('Kaveh memilih untuk tidur...')
+    if m is not None:
+        print(m)
     time.sleep(x)
     os.system('cls' if os.name == 'nt' else 'clear') 
 
@@ -89,9 +95,12 @@ def waktu_sekarang(session):
     return NAMA_WAKTU[session['progress']['indekswaktu']]
 
 def login_menu():
-    clear_terminal(1.5, None)
     while True:
-        print('Pilih cara masuk.\n1. Login \n2. Sign up')
+        clear_terminal(1.5, "Membersihkan terminal...")
+        print("="*5,"SIMULASI HIDUP KAVEH", "="*5)
+        print("Silahkan masuk ke akun anda.")
+        print("1. Sudah punya akun -> Log in")
+        print("2. Belum punya akun -> Sign in")
         opsi = input("> ").strip()
         if opsi == '1':
             session = login()
@@ -100,11 +109,12 @@ def login_menu():
         elif opsi == '2':
             sign_up()
         else:
-            print('Opsi tidak ditemukan.')
+            print('\nOpsi tidak ditemukan.')
 
 def login():
     clear_terminal(0, None)
     while True:
+        print("="*5,"HALAMAN LOGIN","="*5)
         username = input('\nMasukkan nama pengguna atau ketik \'kembali\'.\n> ').strip().lower()
         if username == 'kembali':
             return None
@@ -114,9 +124,9 @@ def login():
             print('Akun tidak ditemukan!')
             continue
         
-        password = input('\nMasukkan kata sandi.\n> ')
+        password = input('Masukkan kata sandi.\n> ')
         if password == data_user[username]['password']:
-            print('Login berhasil!')
+            print('\nLogin berhasil!')
             if data_user[username]['progress'] is None:
                 data_user[username]['progress'] = new_progress()
 
@@ -131,6 +141,7 @@ def login():
 
 def sign_up():
     clear_terminal(0, None)
+    print("="*5,"HALAMAN SIGN UP","="*5)
     username = input("\nMasukkan nama pengguna baru atau '/kembali'.\n> ").strip().lower()
     usn_exist = data_user.get(username)
     if username == "/kembali":
@@ -152,7 +163,7 @@ def new_progress():
     return copy.deepcopy(DEFAULT_PROGRESS)
 
 def intro(session):
-    clear_terminal(1.5, 'def')
+    clear_terminal(1.5, 'Memuat game...')
     print(f"BERMAIN DALAM MODE {session['access'].upper()}")
     print("\nKaveh adalah arsitek baik hati, emosional, idealis, dan butuh mora.")
     print(f"Ia punya utang {SETTINGS['utang_awal']} Mora yang harus dibayar {SETTINGS['batas_hari']+1} hari lagi!")
@@ -211,7 +222,7 @@ def ld(session):
     print("+")
 
 def ljs(session):
-    clear_terminal(1.5, 'ljs')
+    clear_terminal(1.5, "Mengecek papan informasi...")
     while True:
         clear_terminal(0, None)
         print("\n+ \nTAWARAN PROYEK")
@@ -223,7 +234,7 @@ def ljs(session):
         if not bagian:
             continue
         elif bagian[0] == "kembali":
-            print("\nPergi dari papan informasi...")
+            clear_terminal(1.5, "Pergi dari papan informasi...")
             break
         elif bagian[0] == "ladd" and all(x.isdigit() for x in bagian[1:len(bagian)]):
             session['progress']['waitlist'].clear()
@@ -235,7 +246,7 @@ def ljs(session):
                 print("Indeks tidak ditemukan!")
                 continue
             else:
-                os.system('cls')
+                clear_terminal(0, None)
                 print("\nMemilih proyek:")
                 session['progress']['waitlist'].sort(key=lambda k:k['nproyek'])
                 for i, item in enumerate(session['progress']['waitlist'], start=1):
@@ -254,28 +265,40 @@ def ljs(session):
         time.sleep(1.5)
 
 def lp(session):
+    clear_terminal(0, None)
     if not session['progress']['proyek']:
         print('Proyek kosong, masih nganggur!')
+        clear_terminal(0, None)
         return
+    for i, item in enumerate(session['progress']['proyek'], start=1):
+        print(f"{i}. {item['nproyek']} | stress: {item['stress']} | {item['bayaran']} Mora | tenggat: {item['tenggat']}")
     opsi = input("\nKetik satu '[INDEX]' untuk dituntaskan atau 'kembali'.\n> ")
     if opsi.strip().lower() == "kembali":
-        print("Batal bekerja...")
-        return opsi
+        clear_terminal(0, "\nBatal bekerja...")
+        return
     elif opsi.isdigit() and 1 <= int(opsi) <= len(session['progress']['proyek']):
         opsi = int(opsi)
-        print("Kaveh bekerja dengan rajin...")
-        time.sleep(1.5)
-        os.system('cls')
+        clear_terminal(1.5, "\nKaveh bekerja dengan rajin...")
         terselesaikan = session['progress']['proyek'].pop(opsi-1)
         session['progress']['portofolio'].append(terselesaikan)
         print(f"{terselesaikan['nproyek']} terselesaikan!")
         session['progress']['mora'] += terselesaikan['bayaran']
         print(f"Mora +{terselesaikan['bayaran']}")
-        session['progress']['stress'] += SETTINGS['timestress'][session['progress']['indekswaktu']] + terselesaikan['stresscost']
-        print(f"Stress +{(SETTINGS['TIMES'][session['progress']['indekswaktu']]) + terselesaikan['stresscost']}")
+        session['progress']['stress'] += SETTINGS['waktu'][waktu_sekarang(session)]['timestress'] + terselesaikan['stresscost']
+        print(f"Stress +{(SETTINGS['waktu'][waktu_sekarang(session)]['timestress']) + terselesaikan['stresscost']}")
         time_pass(session)
     else:
         print("Indeks tidak ditemukan!")
+
+def lr(session):
+    clear_terminal(1.5, "Kaveh memilih tidur di rumah...")
+    session['progress']['stress'] -= SETTINGS['waktu'][waktu_sekarang(session)]['restval']
+    if session['progress']['stress'] < 0:
+        session['progress']['stress'] = 0
+    print(f"Stress -{SETTINGS['waktu'][waktu_sekarang(session)]['restval']}")
+    print("Kaveh merasa segar kembali!")
+    print(f"Tingkat stress: {session['progress']['stress']}")
+    time_pass(session)
 
 def create_time():
     print('\nMenambah waktu dalam daftar waktu...')
@@ -310,6 +333,7 @@ def delete_time():
     print(f"Berhasil menghapus {terhapus}!")
 
 def edit_value():
+    clear_terminal(0, None)
     for index, (setting, value) in enumerate(SETTINGS.items(), start=1):
         print(f"{index}. {setting} | {value} ")
     print("\nPilih indeks pengaturan untuk diubah.")
@@ -331,14 +355,13 @@ def edit_value():
     
     else:
         print(f"Memilih mengubah {choosen_field}.")
-        new_value = ask_number(0, None)
+        new_value = ask_number(0, None, "Masukkan nilai baru.\n> ")
         if new_value == 'kembali':
             return
-        print(f'{choosen_field} has been changed to {new_value}')
+        print(f'{choosen_field} telah diubah menjadi {new_value}')
         SETTINGS[choosen_field] = new_value
 
 def show_projects():
-    print()
     for i, item in enumerate(all_project, start=1):
         print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
 
@@ -469,27 +492,36 @@ def lusd(session):
             print("Perintah tidak ditemukan.")
         time.sleep(1.5)
 
-def game_navigation(session):
-    print(f"\nKetik 'lh' untuk melihat perintah atau 'kembali' ke halaman login.")
-    print(f"[Hari ke-{session['progress']['hari']}/{SETTINGS['batas_hari']}: {waktu_sekarang(session)}] [{session['progress']['mora']}/{SETTINGS['utang_awal']} Mora]")
-    perintah = input("> ")
-    if perintah == 'kembali':
-        return 'kembali'
-    elif perintah == 'lh':
-        lh(session)
-    elif perintah == 'ld':
-        ld()
-    elif perintah == 'ljs':
-        ljs(session)
-    elif perintah == 'lp':
-        lp(session)
-    elif session['access'] == 'admin':
-        if perintah == 'led':
-            led(session)
-        elif perintah == 'lusd':
-            lusd(session)
-    else:
-        print("Perintah tidak ditemukan.")
+def game_loop(session):
+    while True:
+        ending = check_ending(session)
+        if ending:
+            show_ending(ending, session)
+            input("Ketik apapun untuk kembali ke halaman login.\n> ")
+            return
+        
+        print(f"\nKetik 'lh' untuk melihat perintah atau 'kembali' ke halaman login.")
+        print(f"[Hari ke-{session['progress']['hari']}/{SETTINGS['batas_hari']}: {waktu_sekarang(session)}] [{session['progress']['mora']}/{SETTINGS['utang_awal']} Mora]")
+        perintah = input("> ")
+        if perintah == 'kembali':
+            return 'kembali'
+        elif perintah == 'lh':
+            lh(session)
+        elif perintah == 'ld':
+            ld(session)
+        elif perintah == 'ljs':
+            ljs(session)
+        elif perintah == 'lp':
+            lp(session)
+        elif perintah == 'lr':
+            lr(session)
+        elif session['access'] == 'admin':
+            if perintah == 'led':
+                led()
+            elif perintah == 'lusd':
+                lusd(session)
+        else:
+            print("Perintah tidak ditemukan.")
 
 def check_ending(session):
     if session['progress']['stress'] >= SETTINGS['batas_stress']:
@@ -500,15 +532,21 @@ def check_ending(session):
         return 'bad_end'
     return None
 
+def show_ending(ending, session):
+    clear_terminal(0, None)
+    print(ENDINGS[ending].format(
+        stress=session['progress']['stress'],
+        mora=session['progress']['mora'],
+        utang_awal=SETTINGS['utang_awal'],
+        batas_hari=SETTINGS['batas_hari'] - 1,
+    ))
+
 def run_game():
     session = login_menu()
     if not session:
         return
     intro(session)
-    ending = check_ending(session)
-    if ending:
-        print(ENDINGS[ending])
-    hasil = game_navigation(session)
+    hasil = game_loop(session)
     if hasil == 'kembali':
         return
     
