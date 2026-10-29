@@ -8,6 +8,7 @@ PROJECT_FIELDS = {
     "bayaran": "Mora",
     "tenggat": "Tenggat"
 }
+
 all_project = [
     {"nproyek":"Desain Rumah Nyaman","stresscost":5,"bayaran":50,"tenggat":2},
     {"nproyek":"Desain Rumah Mewah","stresscost":15,"bayaran":125,"tenggat":3}, 
@@ -104,7 +105,7 @@ def login_menu():
         print("="*5,"SIMULASI HIDUP KAVEH", "="*5)
         print("Silahkan masuk ke akun anda.")
         print("1. Sudah punya akun -> Log in")
-        print("2. Belum punya akun -> Sign in")
+        print("2. Belum punya akun -> Sign up")
         opsi = input("> ").strip()
         if opsi == '1':
             session = login()
@@ -118,6 +119,7 @@ def login_menu():
 def login():
     clear_terminal(0, None)
     while True:
+        clear_terminal(1, None)
         print("="*5,"HALAMAN LOGIN","="*5)
         username = input('\nMasukkan nama pengguna atau ketik \'kembali\'.\n> ').strip().lower()
         if username == 'kembali':
@@ -233,7 +235,7 @@ def ljs(session):
         for i, item in enumerate(all_project, start=1):
             print(f"{i}. {item['nproyek']} | Stress: {item['stresscost']} | {item['bayaran']} Mora | Tenggat: {item['tenggat']}")
         print("+")
-        opsi = input("\nKetik 'ladd' satu atau beberapa '[INDEX]' untuk mengambil kerjaan atau 'kembali'.\n> ").lower()
+        opsi = input("\nKetik 'ladd' satu atau beberapa '[INDEX]' untuk mengambil proyek atau 'kembali'.\n> ").lower()
         bagian = opsi.split()
         if not bagian:
             continue
@@ -379,7 +381,7 @@ def edit_value():
             return
         print(f'{choosen_field} telah diubah menjadi {new_value}')
         SETTINGS[choosen_field] = new_value
-        clear_terminal(0, None)
+        clear_terminal(1.5, None)
 
 def show_projects():
     for i, item in enumerate(all_project, start=1):
