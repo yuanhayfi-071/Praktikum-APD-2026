@@ -53,7 +53,7 @@ ENDINGS = {
     ),
     'good_end': (
         "\nHari ke-{batas_hari} telah berlalu. Saatnya bayar utang."
-        "\nGood ending! Mora {mora}."
+        "\nGood ending! Mora {mora}/{utang_awal}."
         "\nKaveh membayar utangnya pada Alhaitham."
     ),
     'bad_end': (
@@ -558,7 +558,7 @@ def show_ending(ending, session):
         stress=session['progress']['stress'],
         mora=session['progress']['mora'],
         utang_awal=SETTINGS['utang_awal'],
-        batas_hari=SETTINGS['batas_hari'] - 1,
+        batas_hari=SETTINGS['batas_hari'],
     ))
 
 def run_game():
